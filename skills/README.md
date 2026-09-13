@@ -94,6 +94,7 @@ When the plan names the target modules, use the specialist skills during phases 
 | --- | --- | --- |
 | UI / frontend | [`modules/frontend/SKILL.md`](modules/frontend/SKILL.md) | usable states, accessibility, performance, responsive behavior |
 | Backend service | [`modules/backend/SKILL.md`](modules/backend/SKILL.md) | contracts, failures, observability, resource safety |
+| Aesthetics | [`modules/aesthetic/SKILL.md`](modules/aesthetic/SKILL.md) | brand, hierarchy, typography, color, spacing, motion |
 | Data / storage | [`modules/data/SKILL.md`](modules/data/SKILL.md) | schema ownership, migrations, integrity, rollback |
 | External API | [`modules/api/SKILL.md`](modules/api/SKILL.md) | versioning, validation, authz, rate limits |
 | Operations | [`modules/ops/SKILL.md`](modules/ops/SKILL.md) | deploy, rollback, health, runbooks, alerts |
