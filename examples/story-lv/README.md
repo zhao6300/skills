@@ -7,7 +7,7 @@ heritage axis without borrowing a real brand's logo or asset.
 
 | Route / component | Primary decision | State | Brand axis | Visual constraint |
 | --- | --- | --- | --- | --- |
-| Story page | Move the reader into Chapter I, then hold one shared editorial grid across the hero and every chapter | Default | Heritage → modern editorial | Warm paper palette, serif voice, one brass accent, no brand copying |
+| Story page | Move the reader into Chapter I, then hold one shared editorial grid across the hero and every chapter | Default | Heritage → modern editorial | Warm paper palette, serif voice, one brass accent, quiet nav / pill CTA, no brand copying |
 
 ## Open locally
 
@@ -20,5 +20,5 @@ Then visit <http://localhost:8000>.
 ## Scope
 
 - Static HTML/CSS only.
-- One forced viewport-height hero, three story chapters, one footer.
+- Top story wayfinding, hero, three story chapters, one footer.
 - No JavaScript, no network assets, and no accumulated state.

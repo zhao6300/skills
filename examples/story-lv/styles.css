@@ -1,9 +1,9 @@
 :root {
-  --ivory: #f6f2e9;
-  --paper: #efe7da;
   --ink: #2f2921;
   --brown: #664d39;
   --brass: #a67b41;
+  --paper: #f7f2ea;
+  --ivory: #f4f0e6;
   --wheat: #d8c8b8;
   --line: rgba(47, 41, 33, .17);
   --thin: 1px solid var(--line);
@@ -38,7 +38,34 @@ main {
   text-align: center;
   gap: .8rem;
   padding-block: clamp(56px, 9vw, 112px) clamp(24px, 4vw, 32px);
+}
+
+.site-nav {
+  display: grid;
+  grid-auto-columns: max-content;
+  gap: .45rem 1.2rem;
+  justify-content: center;
+  padding: .5rem 1.1rem;
+  background: linear-gradient(180deg, #fffefb, #f7f2ea);
   border-bottom: var(--thin);
+}
+
+.site-nav a {
+  color: var(--brown);
+  font-family: var(--sans);
+  font-size: .78rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: var(--brass);
+}
+
+.site-nav a:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 4px;
 }
 
 .eyebrow,
@@ -91,7 +118,7 @@ h2 {
   padding: .8rem 1.35rem;
   border: 1px solid color-mix(in srgb, var(--brass) 50%, transparent);
   border-radius: 999px;
-  background: #fdfcf9;
+  background: #fffdf9;
   color: var(--ink);
   text-decoration: none;
   font-family: var(--sans);
@@ -101,11 +128,9 @@ h2 {
   transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
 }
 
-.cta:hover,
-.cta:focus-within {
-  background: color-mix(in srgb, var(--brass) 92%, #000);
-  border-color: var(--brass);
-  color: #fffefc;
+.cta:hover {
+  background-color: color-mix(in srgb, var(--brass) 82%, #000);
+  color: color-mix(in srgb, var(--brass) 72%, #fffdf9);
 }
 
 .cta:focus-visible,
@@ -143,14 +168,14 @@ h2 {
 .blockquote {
   max-inline-size: 46ch;
   padding-left: 1.2rem;
-  border-left: 2px solid var(--brass);
-  color: color-mix(in srgb, var(--brown) 88%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--brass) 60%, transparent);
+  color: color-mix(in srgb, var(--brown) 92%, transparent);
   font-style: italic;
 }
 
 .site-footer {
   padding: clamp(28px, 4vw, 44px) clamp(20px, 4vw, 40px);
-  background: #2e2721;
+  background: var(--ink);
   color: #f7f2ec;
   font-family: var(--sans);
   font-size: .8rem;

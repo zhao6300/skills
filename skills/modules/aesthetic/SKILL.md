@@ -61,7 +61,10 @@ Use [`references/luxury.md`](references/luxury.md) for valuable patterns from
 well-known luxury-brand sites. Use
 [`references/premium-china.md`](references/premium-china.md) when heritage,
 text density, bilingual typography, or Chinese-market product strategy shapes
-the design. Avoid direct copying; summarize the reusable craft decision.
+the design. Use
+[`references/premium-controls.md`](references/premium-controls.md) when color,
+buttons, menus, and interaction mechanics carry the premium mood. Avoid direct
+copying; summarize the reusable craft decision.
 
 ## Verification
 
