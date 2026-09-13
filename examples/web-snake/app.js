@@ -158,7 +158,7 @@ function setDirection(direction) {
   if (mode === "game-over") {
     return;
   }
-  if (mode === "idle") {
+  if (mode === "idle" || mode === "paused") {
     startGame();
   }
   state = queueDirection(state, direction);
