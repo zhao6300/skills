@@ -13,6 +13,8 @@ let state = createGame();
 let mode = "idle";
 let timerId = 0;
 let pointerStart = null;
+let animationFrameId = 0;
+let lastStepAt = 0;
 
 const keyMap = {
   ArrowUp: "up",
@@ -184,36 +186,52 @@ function getStepDelay(phase) {
 }
 
 function startGame() {
-  if (mode === "running") {
+  if (mode !== "running") {
+    mode = "running";
+    updateStatus("Running");
+    updateControls();
+    lastStepAt = performance.now();
+  }
+  if (!animationFrameId) {
+    animationFrameId = requestAnimationFrame(tickLoop);
+  }
+}
+
+function tickLoop(now) {
+  animationFrameId = 0;
+  if (mode !== "running") {
     return;
   }
-  mode = "running";
-  updateStatus("Running");
-  updateControls();
-  timerId = setTimeout(() => {
-    state = stepGame(state);
-    if (state.gameOver) {
-      endGame();
-      return;
-    }
-    render();
-    updateScore();
-    startGame();
-  }, getStepDelay(state.phase));
+  if (now - lastStepAt < getStepDelay(state.phase)) {
+    animationFrameId = requestAnimationFrame(tickLoop);
+    return;
+  }
+
+  lastStepAt = now;
+  state = stepGame(state);
+  if (state.gameOver) {
+    endGame();
+    return;
+  }
+  render();
+  updateScore();
+  animationFrameId = requestAnimationFrame(tickLoop);
 }
 
 function pauseGame() {
   if (mode !== "running") {
     return;
   }
-  clearTimeout(timerId);
+  cancelAnimationFrame(animationFrameId);
+  animationFrameId = 0;
   mode = "paused";
   updateStatus(`Paused · ${phaseName(state)}`);
   updateControls();
 }
 
 function endGame() {
-  clearTimeout(timerId);
+  cancelAnimationFrame(animationFrameId);
+  animationFrameId = 0;
   mode = "game-over";
   render();
   updateStatus(`Weaved through ${state.phase} barriers · final score ${state.score}`);
@@ -221,8 +239,8 @@ function endGame() {
 }
 
 function restartGame() {
-  clearTimeout(timerId);
-  timerId = 0;
+  cancelAnimationFrame(animationFrameId);
+  animationFrameId = 0;
   state = createGame();
   mode = "idle";
   render();
