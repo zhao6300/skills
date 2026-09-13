@@ -36,16 +36,10 @@ Create or update `ARCHITECTURE.md` and `PLAN.md`.
 
 ## Quality checks
 
-1. The first slice proves value; it is not “setup only”.
-2. Every slice has a command or manual scenario that can prove it.
-3. Backend and frontend boundaries are visible.
-4. Data migration and rollback are not postponed indefinitely.
-5. UI includes loading, empty, error, permission, and mobile behavior.
-6. Dependencies have a reason, not just convenience.
-7. Unknowns are isolated in later slices or experiments.
-8. Each diff is small enough to review before the next.
-9. The plan names automation, not only manual checks.
-10. Rollback is a real command or operational action.
+1. Make the first slice prove user value, not infrastructure alone.
+2. Give every slice a real verification path and a reversible exit.
+3. Keep boundaries, dependencies, and migrations visible when they can constrain design.
+4. Convert unclear choices into explicit experiments or follow-up decisions, not hidden assumptions.
 
 ## Verification
 

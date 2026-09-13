@@ -33,8 +33,8 @@ Record baseline and degradation:
 2. Peak-load response time.
 3. Error rate under peak load.
 4. Resource saturation.
-5. Frontend LCP / INP / CLS for user-visible pages.
-6. Parallel/action-launch contention for agent-heavy products.
+5. User-visible response metrics.
+6. Parallel/action contention.
 
 ## Reliability evidence
 

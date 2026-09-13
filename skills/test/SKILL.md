@@ -23,10 +23,10 @@ Create or update `docs/TEST_PLAN.md` with:
 
 ## Coverage by severity
 
-1. **P0** blocks release and must be automated when technically possible.
-2. **P1** blocks launch and should include data, permission, and error behavior.
-3. **P2** can target UX consistency, accessibility, and infrastructure.
-4. **P3** targets durability, migration, upgrade, and disaster recovery.
+1. **P0** blocks release when behavior is unsafe, unauthorized, expensive, irreversible, or degraded.
+2. **P1** blocks launch when correctness, permissions, or data behavior is wrong.
+3. **P2** covers UX consistency, accessibility, and infrastructure.
+4. **P3** covers durability, migration, upgrade, and disaster recovery.
 
 ## Required gates
 

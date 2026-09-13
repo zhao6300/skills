@@ -25,12 +25,11 @@ Turn the planned slice into reversible source changes with the smallest useful d
 
 ## Quality checks
 
-- Change behavior at the root cause, not by masking a symptom.
-- Preserve the existing naming, error, logging, data, and state conventions.
-- Validate all external input at the boundary; do not trust response bodies or client messages.
-- Distinguish user-safe messages from technical internal diagnostics.
+- Change the smallest root cause that moves the slice forward.
+- Preserve existing naming, logging, state, and data conventions.
+- Validate external input at the boundary and keep diagnostics separate from user-safe messages.
 - Avoid new dependency, abstraction, config, and state unless the slice needs it.
-- Keep TypeScript / Python / SQL / Tailwind type and schema discipline appropriate to the stack.
+- Keep discipline native to the stack.
 
 ## Verification
 

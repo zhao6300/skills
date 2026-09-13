@@ -160,6 +160,16 @@ Never mark a change complete while any blocker remains:
 
 Use the same loop to create or update a skill, but the deliverable is the skill package itself.
 
+### Evolution
+
+Treat a correction from live work as a prompt to generalize, not a prompt to accumulate:
+
+1. Ask what repeated condition, invariant, command, or phase made the correction necessary.
+2. Prefer one reusable decision rule over several case-specific bullets.
+3. When a rule is correct, remove overlapping wording that repeats the same invariant in a less useful form.
+4. Split into a child skill only when the subject has a distinct contract, toolset, failure surface, or invocation boundary—not when it merely varies by project.
+5. Preserve boundaries and existing phrasing where they remain true; verify with an actual prompt, a script, and a must-not-trigger example.
+
 ### Scope
 
 1. Determine the exact recurring job. If the request is vague, infer the closest useful scope instead of trying to cover everything.

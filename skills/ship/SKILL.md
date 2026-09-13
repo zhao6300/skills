@@ -68,7 +68,7 @@ Create or update `docs/RELEASE.md`:
 7. If production behavior differs, stop rollout and reproduce with operational evidence, not by patching in place.
 8. Keep an audit trail: who released what, which config/migration ran, and how response works.
 9. Escalate to on-call/support/security/compliance when data ownership, customer trust, contractual guarantee, external notice, high blast radius, irreversible write, or unexplained autoscaling/capacity anomaly is involved.
-10. Before rollback, preserve enough evidence (config diff, logs, metrics, request IDs) to avoid losing the cause.
+10. Before rollback, preserve enough evidence (config diff, logs, metrics, request IDs) to preserve the causal trail.
 
 ## Done
 
