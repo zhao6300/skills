@@ -14,14 +14,20 @@ the `super-skill` frontend overlay.
 - Open `examples/web-snake/index.html` directly, or serve it with:
 
 ```bash
-              python3 -m http.server 8000 --directory examples/web-snake
-              python3 -m http.server 8000 --bind 0.0.0.0 --directory examples/web-snake
+python3 -m http.server 8000 --directory examples/web-snake
+
+# To expose it on the local network:
+python3 -m http.server 8000 --bind 0.0.0.0 --directory examples/web-snake
 ```
+
+Open `http://127.0.0.1:8000` and click `Start`, or press any arrow key.
 
 Controls:
 
 - Arrow keys: move.
 - Arrow keys also start from the ready state and resume from pause.
+- `W`, `A`, `S`, `D`: move.
+- `Enter` or `Space`: start a ready game.
 - `P`: pause.
 - `R`: restart.
 - On mobile use the on-screen arrows.

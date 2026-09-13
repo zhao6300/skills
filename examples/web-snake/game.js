@@ -34,7 +34,7 @@ export function createGame({
     phase: 0,
     snake,
     direction: initialDirection,
-    pendingDirection: null,
+    pendingDirections: [],
     score: 0,
     foodEaten: 0,
     gameOver: false,
@@ -50,14 +50,17 @@ export function queueDirection(state, direction) {
   if (state.direction === opposite(direction)) {
     return state;
   }
-  return { ...state, pendingDirection: direction };
+  const nextPendingDirections = [...state.pendingDirections, direction];
+  return { ...state, pendingDirections: nextPendingDirections.slice(-2) };
 }
 
 export function stepGame(state) {
   if (state.gameOver) {
     return state;
   }
-  const direction = state.pendingDirection ?? state.direction;
+  const direction = state.pendingDirections.length > 0
+    ? state.pendingDirections[0]
+    : state.direction;
   const move = directions[direction];
   if (!move) {
     return state;
@@ -88,7 +91,9 @@ export function stepGame(state) {
     phase: nextPhase,
     foodEaten: nextFoodEaten,
     direction,
-    pendingDirection: null,
+    pendingDirections: state.pendingDirections.length > 0
+      ? state.pendingDirections.slice(1)
+      : state.pendingDirections,
     score: ateFood ? state.score + 1 : state.score,
     food: nextFood,
   };

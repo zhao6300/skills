@@ -18,6 +18,10 @@ const keyMap = {
   ArrowDown: "down",
   ArrowLeft: "left",
   ArrowRight: "right",
+  w: "up",
+  s: "down",
+  a: "left",
+  d: "right",
 };
 
 function render() {
@@ -190,6 +194,10 @@ function handleKey(event) {
     } else if (mode === "idle") {
       startGame();
     }
+  }
+  if (event.key === "Enter") {
+    event.preventDefault();
+    startGame();
   }
 }
 
