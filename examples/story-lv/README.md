@@ -7,7 +7,7 @@ heritage axis without borrowing a real brand's logo or asset.
 
 | Route / component | Primary decision | State | Brand axis | Visual constraint |
 | --- | --- | --- | --- | --- |
-| Story page | Move the reader into Chapter I, then hold one linear narrative rhythm | Default | Heritage → modern editorial | Warm paper palette, serif voice, one brass accent, no brand copying |
+| Story page | Move the reader into Chapter I, then hold one shared editorial grid across the hero and every chapter | Default | Heritage → modern editorial | Warm paper palette, serif voice, one brass accent, no brand copying |
 
 ## Open locally
 
