@@ -92,3 +92,18 @@ test("engine keeps moving without extra input", () => {
   assert.equal(endHead[0], (startHead[0] + 10) % game.gridSize);
   assert.equal(endHead[1], startHead[1]);
 });
+
+test("every board edge can wrap around without ending the run", () => {
+  const cases = [
+    { initialSnake: [[14, 7], [13, 7], [12, 7]], initialDirection: "right", expected: [0, 7] },
+    { initialSnake: [[0, 7], [1, 7], [2, 7]], initialDirection: "left", expected: [14, 7] },
+    { initialSnake: [[7, 14], [7, 13], [7, 12]], initialDirection: "down", expected: [7, 0] },
+    { initialSnake: [[7, 0], [7, 1], [7, 2]], initialDirection: "up", expected: [7, 14] },
+  ];
+  for (const testCase of cases) {
+    const game = createGame({ ...testCase, food: [8, 8] });
+    const wrapped = stepGame(game);
+    assert.deepEqual(wrapped.snake[0], testCase.expected);
+    assert.equal(wrapped.gameOver, false);
+  }
+});

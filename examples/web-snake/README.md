@@ -7,6 +7,7 @@ the `super-skill` frontend overlay.
 
 - Every five orbs advances the snake through the next phase.
 - Each phase changes color, wall pattern, and step speed.
+- Board edges wrap around, so only phase walls and your own body end a run.
 - The score records progress toward the next phase.
 
 ## How to use
@@ -31,6 +32,7 @@ Controls:
 - `P`: pause.
 - `R`: restart.
 - On mobile use the on-screen arrows.
+- Touch and swipe on the board also steer the snake.
 
 ## Test
 

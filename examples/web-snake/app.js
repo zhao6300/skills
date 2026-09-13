@@ -12,6 +12,7 @@ const directionButtons = document.querySelectorAll("[data-direction]");
 let state = createGame();
 let mode = "idle";
 let timerId = 0;
+let pointerStart = null;
 
 const keyMap = {
   ArrowUp: "up",
@@ -205,14 +206,14 @@ function pauseGame() {
   if (mode !== "running") {
     return;
   }
-  clearInterval(timerId);
+  clearTimeout(timerId);
   mode = "paused";
   updateStatus(`Paused · ${phaseName(state)}`);
   updateControls();
 }
 
 function endGame() {
-  clearInterval(timerId);
+  clearTimeout(timerId);
   mode = "game-over";
   render();
   updateStatus(`Weaved through ${state.phase} barriers · final score ${state.score}`);
@@ -220,7 +221,7 @@ function endGame() {
 }
 
 function restartGame() {
-  clearInterval(timerId);
+  clearTimeout(timerId);
   timerId = 0;
   state = createGame();
   mode = "idle";
@@ -243,6 +244,23 @@ function setDirection(direction) {
 function phaseName(value) {
   const phase = getPhase(value.phase);
   return `${phase.name} ${(value.foodEaten % 5) + 1}/5`;
+}
+
+function handleGesture(event) {
+  if (!pointerStart) {
+    return;
+  }
+  const deltaX = event.clientX - pointerStart.x;
+  const deltaY = event.clientY - pointerStart.y;
+  const threshold = 18;
+  if (Math.abs(deltaX) < threshold && Math.abs(deltaY) < threshold) {
+    return;
+  }
+  const direction = Math.abs(deltaX) > Math.abs(deltaY)
+    ? (deltaX > 0 ? "right" : "left")
+    : (deltaY > 0 ? "down" : "up");
+  event.preventDefault();
+  setDirection(direction);
 }
 
 function handleKey(event) {
@@ -281,6 +299,19 @@ function initialize() {
   restartButton.addEventListener("click", restartGame);
   directionButtons.forEach((button) => {
     button.addEventListener("click", () => setDirection(button.dataset.direction));
+  });
+  canvas.style.touchAction = "none";
+  canvas.addEventListener("pointerdown", (event) => {
+    pointerStart = { x: event.clientX, y: event.clientY };
+  });
+  canvas.addEventListener("pointerup", handleGesture);
+  canvas.addEventListener("pointercancel", () => {
+    pointerStart = null;
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      pauseGame();
+    }
   });
   document.addEventListener("keydown", handleKey);
   render();
