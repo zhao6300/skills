@@ -58,17 +58,7 @@ function render() {
     drawBlock(wall, cellSize, 0.88);
   });
 
-  state.snake.forEach((cell, index) => {
-    context.fillStyle = index === 0 ? phase.head : phase.body;
-    drawCell(cell, cellSize, 1);
-    if (index === 0) {
-      context.fillStyle = "#012";
-      drawCell(cell, cellSize, 0.05);
-    } else if (index % 4 === 0) {
-      context.fillStyle = phase.accent;
-      drawCell(cell, cellSize, 0.39);
-    }
-  });
+  drawSnake(cellSize, phase);
 }
 
 function drawCell([x, y], cellSize, radiusFactor) {
@@ -76,6 +66,88 @@ function drawCell([x, y], cellSize, radiusFactor) {
   context.beginPath();
   context.arc(x * cellSize + cellSize / 2, y * cellSize + cellSize / 2, radius, 0, Math.PI * 2);
   context.fill();
+}
+
+function drawSnake(cellSize, phase) {
+  if (state.snake.length === 0) {
+    return;
+  }
+
+  const center = ([x, y]) => [x * cellSize + cellSize / 2, y * cellSize + cellSize / 2];
+  const start = center(state.snake[0]);
+
+  context.save();
+  context.lineCap = "round";
+  context.lineJoin = "round";
+  const end = center(state.snake[state.snake.length - 1]);
+  const bodyGradient = context.createLinearGradient(
+    start[0],
+    start[1],
+    end[0],
+    end[1],
+  );
+  bodyGradient.addColorStop(0, phase.head);
+  bodyGradient.addColorStop(1, phase.body);
+  context.strokeStyle = bodyGradient;
+  context.lineWidth = cellSize * 0.58;
+  context.beginPath();
+  context.moveTo(start[0], start[1]);
+  for (let index = 1; index < state.snake.length; index += 1) {
+    const point = center(state.snake[index]);
+    context.lineTo(point[0], point[1]);
+  }
+  context.stroke();
+  context.strokeStyle = "rgba(255, 255, 255, 0.14)";
+  context.lineWidth = cellSize * 0.18;
+  context.stroke();
+
+  drawSnakeHead(center(state.snake[0]), cellSize, phase);
+  context.restore();
+}
+
+function drawSnakeHead([x, y], cellSize, phase) {
+  const radius = cellSize * 0.33;
+  const direction = state.direction;
+  const headCenter = [
+    x,
+    y,
+  ];
+  const angle = direction === "up"
+    ? Math.PI / 2
+    : direction === "down"
+      ? -Math.PI / 2
+      : direction === "left"
+        ? 0
+        : Math.PI;
+  const eyeAngle = angle + Math.PI * 0.42;
+  const eyeDistance = radius * 0.48;
+  const eyeRadius = cellSize * 0.085;
+
+  context.save();
+  context.beginPath();
+  context.arc(headCenter[0], headCenter[1], radius, 0, Math.PI * 2);
+  context.fillStyle = phase.head;
+  context.fill();
+
+  for (const mirror of [1, -1]) {
+    const eyeX = headCenter[0] + Math.cos(eyeAngle * mirror) * eyeDistance;
+    const eyeY = headCenter[1] + Math.sin(eyeAngle * mirror) * eyeDistance;
+    context.beginPath();
+    context.arc(eyeX, eyeY, eyeRadius, 0, Math.PI * 2);
+    context.fillStyle = "#012";
+    context.fill();
+    context.beginPath();
+    context.arc(
+      eyeX + eyeRadius * 0.3,
+      eyeY - eyeRadius * 0.3,
+      eyeRadius * 0.35,
+      0,
+      Math.PI * 2,
+    );
+    context.fillStyle = "#dbe7ff";
+    context.fill();
+  }
+  context.restore();
 }
 
 function drawBlock([x, y], cellSize, radiusFactor) {
