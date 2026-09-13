@@ -51,8 +51,10 @@ Before styling a page or component, record:
 ## Luxury reference patterns
 
 Use [`references/luxury.md`](references/luxury.md) for valuable patterns from
-well-known luxury-brand sites. Avoid direct copying; summarize the reusable craft
-decision.
+well-known luxury-brand sites. Use
+[`references/premium-china.md`](references/premium-china.md) when heritage,
+text density, bilingual typography, or Chinese-market product strategy shapes
+the design. Avoid direct copying; summarize the reusable craft decision.
 
 ## Verification
 
@@ -65,4 +67,3 @@ Capture before launch:
 5. One manual check of content that is not decorative filler.
 
 Do not accept design from inspecting the prompt or code alone.
-
