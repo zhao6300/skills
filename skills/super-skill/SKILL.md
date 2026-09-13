@@ -42,6 +42,7 @@ Prove that the behavior matches the contract, not that the model/reviewer believ
 4. Cover at least one happy path and one realistic failure/permission/race/idempotency boundary.
 5. Distinguish acceptance tests from smoke tests, lint, formatting, and security scans.
 6. If a test is impossible or impractical, record the substitute evidence and exact reason.
+7. For interactive or time-dependent behavior, capture a multi-step reproduction timeline before and after the fix, not only one final screenshot.
 
 Minimum validation record:
 
@@ -106,6 +107,10 @@ Apply the overlays that match the change, not all overlays on every task.
 - For a browser game or interactive demo, run at least one headless-browser path that proves state, visible feedback, and the primary control path (touch, pointer, or keyboard).
 - For interactive browser deliverables, keep engine/state separate from DOM rendering so deterministic tests prove movement, collision, scoring, and restart behavior without launching a browser.
 - When no browser runner is available, record browser-only checks as `targeted` and pair them with pure-logic tests plus direct UI evidence.
+- Treat “this does not work” or “it only happens once” as evidence gaps that must be reproduced before patching; first run an actual headless interaction, not only unit checks.
+- For interactive loops, verify a time series after start/resume and over the boundary conditions idle / paused / game-over / hidden tab, not just the first step.
+- Prefer one animation-frame loop or one interval for recurring browser work. Avoid nested timers that can miss a pending step.
+- Keep edge-case behavior explicit (wrap, fail, retry), and pair each renderer change with a pure engine test.
 
 ### Backend
 
@@ -213,6 +218,7 @@ Treat the drafted skill as a change to be proven, not a document to be blessed.
 5. If the failure repeats across cases, move the recurring helper into a script/reference rather than writing a new workaround each time.
 6. Revise instruction, reference, or description—not the test set—to fix a failure. Re-run enough cases to prove the change, then run the original failing case again.
 7. Stop when the user says “good enough”, when two successive meaningful cases show no new improvement, or when the skill has a recorded follow-up with an owner.
+8. When the same complaint or correction appears twice, convert its root cause into a short skill rule with a repeatable command, expected artifact, and stopping condition.
 
 ### Validate a skill
 
