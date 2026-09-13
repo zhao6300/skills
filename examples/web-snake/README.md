@@ -21,6 +21,7 @@ the `super-skill` frontend overlay.
 Controls:
 
 - Arrow keys: move.
+- Arrow keys also start from the ready state and resume from pause.
 - `P`: pause.
 - `R`: restart.
 - On mobile use the on-screen arrows.
