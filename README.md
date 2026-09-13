@@ -28,6 +28,8 @@ Use /skills/super-skill/SKILL.md to handle: <request>
 The super-skill then chooses the narrowest applicable mode, applies the relevant domain overlays,
 and requires `validation`, `security`, and `evidence` before done.
 
+You can also read a working example in [`examples/web-snake/README.md`](examples/web-snake/README.md).
+
 ## Repository layout
 
 ```text
@@ -44,6 +46,7 @@ skills/verify/             Collect launch and operational evidence
 skills/ship/               Versioned, observable, reversible release path
 skills/modules/            Frontend/backend/API/data/ops overlays
 docs/                      Research, decisions, readiness patterns
+examples/web-snake/        Static web gameplay reference example
 ```
 
 ## Add a skill

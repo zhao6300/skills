@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Snake</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main>
+      <h1>Web Snake</h1>
+      <p data-role="status" aria-live="polite">Ready</p>
+      <canvas data-role="board" width="480" height="480" aria-label="Snake board"></canvas>
+      <p>Score: <span data-role="score">0</span></p>
+      <div class="actions" role="group" aria-label="Game controls">
+        <button data-action="start" type="button">Start</button>
+        <button data-action="pause" type="button">Pause</button>
+        <button data-action="restart" type="button">Restart</button>
+      </div>
+      <div class="dpad" role="group" aria-label="Directional controls">
+        <button data-direction="up" type="button" aria-label="Move up">&#8593;</button>
+        <button data-direction="down" type="button" aria-label="Move down">&#8595;</button>
+        <button data-direction="left" type="button" aria-label="Move left">&#8592;</button>
+        <button data-direction="right" type="button" aria-label="Move right">&#8594;</button>
+      </div>
+    </main>
+    <script type="module" src="./app.js" defer></script>
+  </body>
+</html>

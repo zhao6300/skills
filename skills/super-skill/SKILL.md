@@ -101,6 +101,8 @@ Apply the overlays that match the change, not all overlays on every task.
 - Keep labels understandable to the target user, one primary action per core screen, and destructive actions explicit.
 - Provide keyboard reachability, visible focus, accessible names for icon-only controls, sufficient contrast, semantics, and mobile-feasible flows.
 - Test the smallest keyboard walkthrough, the narrowest supported viewport, a network failure and retry, and Web Vitals where the tooling supports them.
+- For interactive browser deliverables, keep engine/state separate from DOM rendering so deterministic tests prove movement, collision, scoring, and restart behavior without launching a browser.
+- When no browser runner is available, record browser-only checks as `targeted` and pair them with pure-logic tests plus direct UI evidence.
 
 ### Backend
 

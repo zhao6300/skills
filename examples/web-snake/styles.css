@@ -1,0 +1,51 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  background-color: #07111b;
+  color: #dbe7ff;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  margin: 0;
+  background-color: #07111b;
+}
+
+main {
+  width: min(560px, 100%);
+  padding: 1rem;
+}
+
+canvas {
+  width: min(480px, 100%);
+  aspect-ratio: 1 / 1;
+  border: 1px solid #1b2f45;
+  border-radius: 0.5rem;
+  background-color: #08131f;
+}
+
+button {
+  border: 1px solid #234;
+  border-radius: 0.35rem;
+  padding: 0.55rem 0.9rem;
+  background-color: #102a45;
+  color: #dbe7ff;
+}
+
+button:disabled {
+  opacity: 0.4;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(48px, 1fr));
+  gap: 0.5rem;
+}
