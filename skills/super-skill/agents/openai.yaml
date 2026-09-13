@@ -1,0 +1,5 @@
+display_name: Super Skill
+short_description: Scope, build, verify, ship, or create reusable skills
+default_prompt: >-
+  Use the super skill to determine the narrowest useful mode, produce the smallest
+  reversible slice, and verify it with concrete evidence.
