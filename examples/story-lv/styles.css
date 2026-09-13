@@ -1,6 +1,6 @@
 :root {
-  --ivory: #f4f0e9;
-  --paper: #eae2d7;
+  --ivory: #f6f2e9;
+  --paper: #efe7da;
   --ink: #2f2921;
   --brown: #664d39;
   --brass: #a67b41;
@@ -18,61 +18,46 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: 17px;
-  line-height: 1.72;
-  background: linear-gradient(155deg, #fbf8f3, var(--ivory) 48%, var(--paper));
+  line-height: 1.7;
+  background: linear-gradient(160deg, #fffdf8, var(--ivory) 48%, var(--paper));
 }
 
 main {
-  max-inline-size: min(1240px, calc(100% - clamp(48px, 8vw, 160px)));
+  max-inline-size: min(1160px, calc(100% - clamp(40px, 8vw, 120px)));
   margin-inline: auto;
-  padding-block: clamp(48px, 8vw, 96px) clamp(48px, 8vw, 96px);
+  padding-block: clamp(48px, 8vw, 96px) clamp(40px, 6vw, 64px);
   display: grid;
-  gap: clamp(28px, 4vw, 72px);
+  gap: clamp(24px, 4vw, 56px);
 }
 
 .hero {
-  padding-block: clamp(32px, 5vw, 64px) clamp(24px, 4vw, 48px);
-}
-
-.hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
-  gap: clamp(24px, 5vw, 64px);
-  align-items: end;
-}
-
-.hero-intro {
-  display: grid;
-  gap: .35rem;
-}
-
-.hero-support {
-  display: grid;
-  gap: 1rem;
-  align-content: end;
+  place-items: center;
+  text-align: center;
+  gap: .8rem;
+  padding-block: clamp(56px, 9vw, 112px) clamp(24px, 4vw, 32px);
+  border-bottom: var(--thin);
 }
 
 .eyebrow,
 .chapter-label {
   margin: 0;
-  color: var(--brass);
+  color: var(--brown);
   font-family: var(--sans);
-  font-size: .82rem;
+  font-size: .8rem;
   letter-spacing: .24em;
   text-transform: uppercase;
 }
 
 .mark {
-  inline-size: 64px;
-  padding-block: .46rem;
-  border: 1px solid color-mix(in srgb, var(--brass) 34%, transparent);
-  border-radius: 999px;
-  text-align: center;
+  inline-size: 78px;
+  padding-block: .55rem;
+  border: 1px solid color-mix(in srgb, var(--brass) 40%, transparent);
   color: var(--brass);
   font-family: var(--sans);
-  font-size: .9rem;
+  font-size: .92rem;
   letter-spacing: .12em;
 }
 
@@ -80,36 +65,37 @@ h1,
 h2 {
   margin: 0;
   color: var(--ink);
-  letter-spacing: -.035em;
-  line-height: 1.08;
+  font-family: var(--serif);
+  letter-spacing: -.032em;
+  line-height: 1.06;
   font-weight: 600;
 }
 
 h1 {
-  font-size: clamp(3.2rem, 6.4vw, 5.6rem);
+  font-size: clamp(3rem, 4.8vw, 4.6rem);
 }
 
 h2 {
-  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
 }
 
 .lede {
-  max-inline-size: 44ch;
-  color: color-mix(in srgb, var(--ink) 77%, transparent);
-  font-size: clamp(1.05rem, 2vw, 1.3rem);
-  line-height: 1.6;
+  max-inline-size: 48ch;
+  color: color-mix(in srgb, var(--ink) 78%, transparent);
+  font-size: 1.04rem;
+  line-height: 1.65;
 }
 
 .cta {
-  justify-self: start;
-  padding: .9rem 1.4rem;
+  justify-self: center;
+  padding: .8rem 1.35rem;
   border: 1px solid color-mix(in srgb, var(--brass) 50%, transparent);
   border-radius: 999px;
-  background: #fdfcf8;
+  background: #fdfcf9;
   color: var(--ink);
   text-decoration: none;
   font-family: var(--sans);
-  font-size: 1rem;
+  font-size: .98rem;
   font-weight: 500;
   letter-spacing: .06em;
   transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
@@ -129,15 +115,10 @@ h2 {
 }
 
 .chapter {
-  padding-block: clamp(32px, 5vw, 72px);
-  border-top: var(--thin);
-}
-
-.chapter-grid {
   display: grid;
-  grid-template-columns: minmax(0, .76fr) minmax(0, 1.24fr);
-  gap: clamp(20px, 4vw, 56px);
-  align-items: start;
+  grid-template-columns: minmax(0, .64fr) minmax(0, 1.36fr);
+  gap: clamp(20px, 4vw, 48px);
+  padding-block: clamp(28px, 4.5vw, 56px);
 }
 
 .chapter-meta {
@@ -146,38 +127,38 @@ h2 {
   align-content: start;
 }
 
-.chapter-label {
-  margin-bottom: .25rem;
-}
-
 .chapter-body {
   display: grid;
   gap: .75rem;
-  max-inline-size: 56ch;
+  max-inline-size: 52ch;
 }
 
 .chapter p {
-  color: #3a3226;
+  margin: 0;
+  color: color-mix(in srgb, var(--ink) 86%, transparent);
+  font-size: 1.03rem;
+  line-height: 1.7;
 }
 
 .blockquote {
-  padding-left: 1.25rem;
+  max-inline-size: 46ch;
+  padding-left: 1.2rem;
   border-left: 2px solid var(--brass);
-  color: color-mix(in srgb, var(--brown) 85%, transparent);
+  color: color-mix(in srgb, var(--brown) 88%, transparent);
   font-style: italic;
 }
 
 .site-footer {
-  padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 48px);
+  padding: clamp(28px, 4vw, 44px) clamp(20px, 4vw, 40px);
   background: #2e2721;
   color: #f7f2ec;
   font-family: var(--sans);
-  font-size: .82rem;
+  font-size: .8rem;
   text-align: center;
 }
 
 .site-footer p {
-  margin: 0 0 .35rem;
+  margin: 0 0 .3rem;
 }
 
 .link {
@@ -190,23 +171,23 @@ h2 {
   text-decoration-color: #f7f2ec;
 }
 
-@media (max-width: 760px) {
-  .hero-grid,
-  .chapter-grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(20px, 6vw, 32px);
-  }
-
-  .hero {
-    padding-block: 40px 24px;
-  }
-
+@media (max-width: 720px) {
   .chapter {
-    padding-block: 24px;
+    gap: 14px;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .mark {
-    margin-inline: 0;
+  .chapter-body,
+  .lede {
+    max-inline-size: none;
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 8vw, 2.9rem);
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 6vw, 1.9rem);
   }
 
   body {
