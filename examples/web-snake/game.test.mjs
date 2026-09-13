@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createGame, getPhaseWalls, getWallAt, stepGame } from "./game.js";
+import { createGame, getPhaseWalls, getWallAt, queueDirection, stepGame } from "./game.js";
 
 test("snake advances without eating", () => {
   const game = createGame({
@@ -75,4 +75,20 @@ test("snake can reverse direction without immediate collision", () => {
   });
   const result = stepGame({ ...game, direction: "up" });
   assert.equal(result.snake[0][1], 1);
+});
+
+test("engine keeps moving without extra input", () => {
+  let game = createGame({
+    initialDirection: "right",
+    food: [10, 7],
+  });
+  game = queueDirection(game, "right");
+  const startHead = game.snake[0];
+  for (let index = 0; index < 10; index += 1) {
+    game = stepGame(game);
+    assert.equal(game.gameOver, false);
+  }
+  const endHead = game.snake[0];
+  assert.equal(endHead[0], (startHead[0] + 10) % game.gridSize);
+  assert.equal(endHead[1], startHead[1]);
 });

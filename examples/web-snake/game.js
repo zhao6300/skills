@@ -68,15 +68,19 @@ export function stepGame(state) {
 
   const head = state.snake[0];
   const nextHead = [head[0] + move[0], head[1] + move[1]];
-  const blockedWall = getWallAt(nextHead, state.phase);
-  if (isOutside(state.gridSize, nextHead) || containsCell(state.snake, nextHead) || blockedWall) {
+  const nextHeadOnBoard = isOutside(state.gridSize, nextHead)
+    ? wrapAround(state.gridSize, nextHead)
+    : nextHead;
+  const blockedWall = getWallAt(nextHeadOnBoard, state.phase);
+  if (containsCell(state.snake, nextHeadOnBoard) || blockedWall) {
     return { ...state, gameOver: true };
   }
 
-  const ateFood = state.food[0] === nextHead[0] && state.food[1] === nextHead[1];
+
+  const ateFood = state.food[0] === nextHeadOnBoard[0] && state.food[1] === nextHeadOnBoard[1];
   const nextSnake = ateFood
-    ? [nextHead, ...state.snake]
-    : [nextHead, ...state.snake.slice(0, -1)];
+    ? [nextHeadOnBoard, ...state.snake]
+    : [nextHeadOnBoard, ...state.snake.slice(0, -1)];
   const nextFoodEaten = ateFood ? state.foodEaten + 1 : state.foodEaten;
   const nextPhase = ateFood && nextFoodEaten % 5 === 0
     ? (state.phase + 1) % PHASES.length
@@ -109,6 +113,13 @@ export function getPhaseWalls(phase) {
 
 export function getPhase(index) {
   return PHASES[index % PHASES.length];
+}
+
+function wrapAround(gridSize, [x, y]) {
+  return [
+    (x + gridSize) % gridSize,
+    (y + gridSize) % gridSize,
+  ];
 }
 
 function spawnFood({ gridSize, snake, walls = [], randomInt }) {
