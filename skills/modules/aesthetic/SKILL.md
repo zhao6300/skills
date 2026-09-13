@@ -26,6 +26,10 @@ Before styling a page or component, record:
 4. Editorial ↔ interface.
 5. Warm ↔ cool.
 
+Treat the recorded decision as the hypothesis, not the result; verify it against
+rendered colors, labels, hierarchy values, and the user-facing story the page
+should carry.
+
 ## Craft loop
 
 1. Name the one hierarchy this layout should serve.
@@ -48,6 +52,9 @@ Before styling a page or component, record:
 7. Avoid generic imagery that would work on almost any brand.
 8. If a rule conflicts with usability, usability wins.
 
+Keep decorative labels inside the decorative system instead of using a brand
+font or heading style as a shortcut for explicit legibility.
+
 ## Luxury reference patterns
 
 Use [`references/luxury.md`](references/luxury.md) for valuable patterns from
@@ -65,5 +72,10 @@ Capture before launch:
 3. One contrast check for main text and controls.
 4. One visual review of the brand axis and hierarchy.
 5. One manual check of content that is not decorative filler.
+
+When a browser is available, record the actual rendered values for primary text,
+chapter titles, callouts, and decorative labels—not falling back to just noting
+the colors in the stylesheet. A brand-colored label that omits its background or
+multi-column contrast is a repeatable failing check, not a variation.
 
 Do not accept design from inspecting the prompt or code alone.
