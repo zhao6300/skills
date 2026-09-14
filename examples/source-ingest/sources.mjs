@@ -25,6 +25,11 @@ function normalizeDoi(doi) {
   return /^10\.\d{4,9}\//.test(value) ? `https://doi.org/${value}` : null;
 }
 
+function huggingFaceLicense(model) {
+  const tags = model.cardData?.tags ?? model.license_tag ?? model.tags ?? [];
+  return tags.some((tag) => String(tag).startsWith("license:")) ? "open" : "provider";
+}
+
 const sources = {
   "hacker-news": {
     endpoint: (query) =>
@@ -42,6 +47,24 @@ const sources = {
         licenseName: "provider",
         sourceUrl: `https://news.ycombinator.com/item?id=${hit.objectID}`,
         retrievedAt: hit.created_at,
+      })),
+  },
+  "dev-community": {
+    endpoint: (query) =>
+      `https://dev.to/api/articles?tag=${encodeURIComponent(query)}&per_page=20`,
+    adapt: (data) =>
+      data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        url: item.url,
+        publishedAt: item.published_at,
+        authors: item.user?.name ? [item.user.name] : [],
+        summary: item.description,
+        topics: item.tag_list,
+        type: "news",
+        licenseName: item.license ? item.license : "open",
+        sourceUrl: item.url,
+        retrievedAt: item.created_at,
       })),
   },
   "openalex": {
@@ -80,6 +103,64 @@ const sources = {
         retrievedAt: item.deposited?.["date-time"],
       })) ?? [],
   },
+  "semantic-scholar": {
+    endpoint: (query) =>
+      `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(query)}&limit=20&fields=${encodeURIComponent("paperId,title,abstract,authors,year,url,externalIds,publicationDate,openAccessPdf")}`,
+    adapt: (data) =>
+      data.data?.map((paper) => ({
+        id: paper.paperId,
+        title: paper.title,
+        url: normalizeDoi(paper.externalIds?.DOI) ?? paper.url,
+        publishedAt: paper.publicationDate ?? paper.year,
+        authors: paper.authors?.map((author) => author.name) ?? [],
+        summary: paper.abstract,
+        topics: [],
+        type: "paper",
+        licenseName: paper.openAccessPdf ? "open" : "provider",
+        sourceUrl: normalizeDoi(paper.externalIds?.DOI) ?? paper.url,
+        retrievedAt: data.granted_at,
+      })),
+  },
+  "github": {
+    endpoint: (query) =>
+      `https://api.github.com/search/repositories?query=${encodeURIComponent(query)}&per_page=20`,
+    authHeaders: ({ githubToken }) =>
+      githubToken ? { authorization: `Bearer ${githubToken}` } : {},
+    adapt: (data) =>
+      data.items?.map((repo) => ({
+        id: repo.id,
+        title: repo.full_name,
+        url: repo.html_url,
+        publishedAt: repo.updated_at,
+        authors: repo.owner?.login ? [repo.owner.login] : [],
+        summary: repo.description,
+        topics: repo.topics,
+        type: "code",
+        licenseName: repo.license?.spdx_id,
+        sourceUrl: repo.html_url,
+        retrievedAt: repo.updated_at,
+      })),
+  },
+  "hugging-face": {
+    endpoint: (query) =>
+      `https://huggingface.co/api/models?search=${encodeURIComponent(query)}&limit=20&sort=downloads&direction=-1`,
+    authHeaders: ({ huggingFaceToken }) =>
+      huggingFaceToken ? { authorization: `Bearer ${huggingFaceToken}` } : {},
+    adapt: (data) =>
+      data.map((model) => ({
+        id: model.modelId,
+        title: model.modelId,
+        url: `https://huggingface.co/${model.modelId}`,
+        publishedAt: model.createdAt ? model.createdAt.slice(0, 10) : null,
+        authors: model.author ? [model.author] : [],
+        summary: model.description,
+        topics: model.tags,
+        type: "model",
+        licenseName: huggingFaceLicense(model),
+        sourceUrl: model.modelId,
+        retrievedAt: model.lastModified,
+      })),
+  },
 };
 
 export function normalizeRecord(record, options = {}) {
@@ -88,10 +169,14 @@ export function normalizeRecord(record, options = {}) {
   }
 
   const { source = record.source, sourceType = record.type ?? "source", fetchedAt = record.retrievedAt } = options;
-  const sourceTypeValue = sourceType === "news" || sourceType === "paper" ? sourceType : "source";
+  const allowedTypes = ["news", "paper", "code", "model", "dataset", "grant", "patent"];
+  if (!allowedTypes.includes(sourceType)) {
+    throw new TypeError(`Unsupported source type: ${sourceType}`);
+  }
+  const sourceTypeValue = sourceType;
   const sourceValue = String(source ?? "unknown");
   const identity = externalIdentity(record.id);
-  const typeTag = sourceTypeValue === "news" ? "news" : "research";
+  const typeTag = sourceTypeValue === "paper" ? "research" : sourceTypeValue;
 
   return {
     id: `${sourceValue}:${identity}`,
@@ -163,7 +248,7 @@ function normaliseTopics(values, typeTag) {
   return [...new Set([typeTag, ...topics])];
 }
 
-export function createSourceRegistry({ fetch = globalThis.fetch ?? undefined } = {}) {
+export function createSourceRegistry({ fetch = globalThis.fetch ?? undefined, authTokens = {} } = {}) {
   const fetchImpl = fetch ?? defaultFetch;
   if (!fetchImpl) {
     throw new TypeError("createSourceRegistry requires a fetch implementation");
@@ -179,7 +264,10 @@ export function createSourceRegistry({ fetch = globalThis.fetch ?? undefined } =
 
       const sourceResults = await Promise.all(
         Object.entries(sources).map(async ([source, sourceDefinition]) => {
-          const response = await fetchImpl(sourceDefinition.endpoint(text));
+          const response = await fetchImpl(
+            sourceDefinition.endpoint(text),
+            sourceDefinition.authHeaders?.(authTokens) ?? {},
+          );
           if (!response.ok) {
             throw new Error(`${source} fetch failed with status ${response.status}`);
           }
