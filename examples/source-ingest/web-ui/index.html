@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Source ingest explorer</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#records">Skip to results</a>
+  <header>
+    <div class="intro">
+      <p class="eyebrow">Source ingest</p>
+      <h1>Technology & research source explorer</h1>
+      <p class="body-text">Search across curated technology and research sources in one normalized view.</p>
+    </div>
+  </header>
+  <main>
+    <form id="search-form" class="search">
+      <div class="search-field">
+        <label for="query">Keyword</label>
+        <input id="query" name="query" type="search" placeholder="e.g. edge deployment" required autocomplete="off" value="edge deployment">
+      </div>
+      <div class="search-field">
+        <label for="filter">Source type</label>
+        <select id="filter">
+          <option value="all">All types</option>
+          <option value="news">News</option>
+          <option value="paper">Papers</option>
+          <option value="code">Code</option>
+          <option value="model">Models</option>
+        </select>
+      </div>
+      <button type="submit">Search</button>
+    </form>
+    <section id="records" aria-live="polite" aria-busy="false">
+      <p class="intro-copy">Waiting for search.</p>
+    </section>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

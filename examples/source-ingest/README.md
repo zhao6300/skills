@@ -27,6 +27,29 @@ publication date instead of exposing every source-specific date field.
 node --test examples/source-ingest/sources.test.mjs
 ```
 
+## Browser UI
+
+Start the local server:
+
+```bash
+node examples/source-ingest/server.mjs
+```
+
+Then visit <http://127.0.0.1:8787/> and submit a query. The UI reads the same
+normalized records with:
+
+```bash
+curl "http://127.0.0.1:8787/api/sources?query=edge%20deployment"
+```
+
+The search boundary is intentionally simple:
+
+1. Only `GET` is allowed.
+2. Only 160-character queries are accepted.
+3. No records are stored on the server; live requests are not cached.
+4. External source errors fail the whole response rather than returning a
+   silent partial list.
+
 ## Covered behavior
 
 1. Hacker News, OpenAlex, and Crossref produce the same contract.
@@ -38,3 +61,5 @@ node --test examples/source-ingest/sources.test.mjs
 7. Unsupported normalized source types are rejected rather than silently mapped to a generic type.
 8. Authenticated source tokens go in request headers, never in endpoint URLs.
 9. Refetches keep the normalized record identity stable and update `fetched_at`.
+10. The web UI fetches `/api/sources`, filters by `source_type`, and keeps a
+    visible error state when an external source is unavailable.
