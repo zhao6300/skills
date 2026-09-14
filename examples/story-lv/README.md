@@ -47,6 +47,12 @@ Then visit <http://localhost:8000>.
 node examples/story-lv/verify.mjs
 ```
 
+Full-render check:
+
+```bash
+node --test examples/story-lv/browser.test.mjs
+```
+
 This checks the invariant structure (header, main, footer, named chapters),
 three chapter visual anchors, one primary CTA, the intentionally quiet closing
 CTA, shared paper / brass design tokens, and absence of remote script or styles.
@@ -57,7 +63,5 @@ It does not replace a browser review for color, layout, or focus.
 | Check | Viewport | Result |
 | --- | --- | --- |
 | Anchor and landmark integrity | No viewport | Pass |
-| Full-page masthead, hero, chapters, panel, footer | `1440 × 3400` | Pass against headless Chrome screenshot (before chapter figures) |
-| Article rhythm and reading measure | `1200 × 1200` | Pass against headless Chrome screenshot (before chapter figures) |
-| Mobile nav, typography, and site shell | `390 × 2400` | Pass against headless Chrome screenshot (before chapter figures) |
+| Full-render desktop and mobile usability, CTA visibility, article navigation, and overflow | `1440 × 1000` and `390 × 2400` | `node --test examples/story-lv/browser.test.mjs` |
 | Static structure, hierarchy, tokens, and remote-script/style absence | No viewport | `node examples/story-lv/verify.mjs` |
