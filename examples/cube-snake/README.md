@@ -38,6 +38,21 @@ python3 -m http.server 8001 --directory examples/cube-snake
 
 Open `http://127.0.0.1:8001`.
 
+### Headless interaction walkthrough
+
+Use Chrome/Playwright locally:
+
+```bash
+python3 -m http.server 8001 --directory examples/cube-snake &
+```
+
+Then press:
+
+1. `ArrowRight` — the status should become `进行中`.
+2. `Pause` — the status should become `已暂停`.
+3. `Restart` — the status should return to `按开始或方向键`.
+4. `ArrowUp` again — the game should resume.
+
 Headless check:
 
 ```bash
