@@ -36,6 +36,7 @@ restartButton.addEventListener("click", restartGame);
 orbitInput.addEventListener("input", updateCamera);
 pitchInput.addEventListener("input", updateCamera);
 window.addEventListener("keydown", handleKeydown);
+bindStageDrag();
 
 function handleKeydown(event) {
   if (keysToDirections[event.key]) {
@@ -172,6 +173,37 @@ function updateButtons() {
 function updateCamera() {
   document.documentElement.style.setProperty("--orbit", `${orbitInput.value}deg`);
   document.documentElement.style.setProperty("--pitch", `${pitchInput.value}deg`);
+}
+
+function bindStageDrag() {
+  const stage = document.querySelector(".stage");
+  let drag = null;
+  stage.addEventListener("pointerdown", (event) => {
+    drag = { x: event.clientX, y: event.clientY, orbit: orbitInput.valueAsNumber, pitch: pitchInput.valueAsNumber };
+    stage.setPointerCapture(event.pointerId);
+    stage.dataset.dragging = "true";
+  });
+  stage.addEventListener("pointermove", (event) => {
+    if (!drag) {
+      return;
+    }
+    const deltaX = event.clientX - drag.x;
+    const deltaY = event.clientY - drag.y;
+    orbitInput.value = String(clamp(drag.orbit + deltaX * 0.4, -160, 160));
+    pitchInput.value = String(clamp(drag.pitch - deltaY * 0.4, -80, 80));
+    updateCamera();
+  });
+  stage.addEventListener("pointerup", clearDrag);
+  stage.addEventListener("pointercancel", clearDrag);
+
+  function clearDrag() {
+    drag = null;
+    stage.dataset.dragging = "false";
+  }
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
 }
 
 function updateStatus(text) {

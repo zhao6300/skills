@@ -1,9 +1,9 @@
 :root {
-  --cube-size: min(300px, 74vw);
+  --cube-size: min(340px, 76vw);
   --half-size: calc(var(--cube-size) / 2);
-  --cell-size: calc(var(--cube-size) / 9);
-  --grid-size: 9;
-  --body-size: calc(var(--cell-size) * 0.92);
+  --cell-size: calc(var(--cube-size) / 5);
+  --grid-size: 5;
+  --body-size: calc(var(--cell-size) * 1.08);
   --paper: #070b11;
   --ink: #f2feff;
   --muted: rgba(242, 254, 255, 0.66);
@@ -169,6 +169,10 @@ h1 {
   perspective-origin: 50% 42%;
   display: grid;
   place-items: center;
+  cursor: grab;
+}
+
+.stage[data-dragging="true"] { cursor: grabbing; }
 }
 
 .cube {
@@ -209,9 +213,10 @@ h1 {
   top: 50%;
   width: var(--body-size);
   height: var(--body-size);
-  border-radius: 12px;
+  border-radius: 14px;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1)),
+    radial-gradient(circle at 32% 34%, rgba(255, 255, 255, 0.56) 0%, rgba(255, 255, 255, 0.14) 44%, transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent),
     var(--body);
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow:
@@ -228,10 +233,28 @@ h1 {
 
 .cell.head {
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.22)),
+    radial-gradient(circle at 34% 36%, rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.16) 46%, transparent 68%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24), transparent),
     var(--head);
   border-color: rgba(255, 255, 255, 0.28);
 }
+
+.cell.head::before,
+.cell.head::after {
+  content: "";
+  position: absolute;
+  inline-size: calc(var(--cell-size) * 0.18);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 36% 34%, #fffdf8 12%, rgba(255, 253, 248, 0.6) 38%, transparent 72%);
+  box-shadow: 0 0 10px rgba(255, 253, 248, 0.36);
+  transform: translateZ(calc(var(--cell-size) * 0.31));
+  pointer-events: none;
+}
+
+.cell.head::before { inset-block-start: 24%; inset-inline-start: 18%; }
+.cell.head::after { inset-block-start: 24%; inset-inline-end: 18%; }
 
 .orb {
   position: absolute;

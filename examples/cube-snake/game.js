@@ -23,8 +23,8 @@ export const PHASES = [
 ];
 
 export function createGame({
-  gridSize = 9,
-  initialSnake = [[4, 4, 4], [4, 4, 3], [4, 4, 2], [4, 4, 1], [4, 4, 0]],
+  gridSize = 5,
+  initialSnake = [[2, 2, 2], [2, 2, 1], [2, 2, 0], [2, 2, 4], [2, 2, 3]],
   initialDirection = "+z",
   food = null,
   randomInt = Math.random,
@@ -130,7 +130,7 @@ export function getPhase(index) {
 }
 
 export function getStepDelay(phase) {
-  return 180 - phase * 18;
+  return 220 - phase * 26;
 }
 
 export function spawnFood({ gridSize, points = [], randomInt = Math.random }) {
