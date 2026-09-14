@@ -1,0 +1,258 @@
+:root {
+  --cube-size: min(300px, 74vw);
+  --half-size: calc(var(--cube-size) / 2);
+  --cell-size: calc(var(--cube-size) / 9);
+  --grid-size: 9;
+  --body-size: calc(var(--cell-size) * 0.92);
+  --paper: #070b11;
+  --ink: #f2feff;
+  --muted: rgba(242, 254, 255, 0.66);
+  --line: rgba(242, 254, 255, 0.14);
+  --accent: #7ee9ff;
+  --head: #7ee9ff;
+  --body: #0ea5e9;
+  --orb: #5eead4;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(120% 80% at 50% 40%, rgba(255, 255, 255, 0.08), transparent 70%),
+    var(--paper);
+  color: var(--ink);
+  font-family: "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.64;
+}
+
+.site {
+  min-height: 100vh;
+  padding: clamp(24px, 5vw, 56px);
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 400px);
+  align-items: start;
+  gap: clamp(24px, 5vw, 48px);
+  justify-content: center;
+}
+
+.panel {
+  padding: clamp(22px, 3vw, 38px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.35);
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Songti SC", "Noto Serif", Georgia, serif;
+  font-size: clamp(40px, 6vw, 52px);
+  line-height: 1.02;
+}
+
+.lede,
+.help p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.score {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.score > div {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.score span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 4px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.score strong {
+  color: var(--ink);
+  font-size: 18px;
+}
+
+.actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.button {
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #071017;
+}
+
+.button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #071017;
+}
+
+.button.primary:hover,
+.button.primary:focus-visible {
+  background: transparent;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.status {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.help { margin-top: 26px; }
+
+.help h2 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.stage-wrap {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: clamp(20px, 4vw, 32px);
+  display: grid;
+  justify-items: center;
+}
+
+.stage {
+  inline-size: 100%;
+  aspect-ratio: 1;
+  perspective: 900px;
+  perspective-origin: 50% 42%;
+  display: grid;
+  place-items: center;
+}
+
+.cube {
+  position: relative;
+  inline-size: var(--cube-size);
+  aspect-ratio: 1;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--pitch, -24deg)) rotateY(var(--orbit, 56deg));
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02) 58%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 14px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 0 26px rgba(255, 255, 255, 0.12);
+}
+
+.front { transform: translateZ(calc(var(--half-size) - 2px)); }
+.back { transform: rotateY(180deg) translateZ(calc(var(--half-size) - 2px)); }
+.left { transform: rotateY(-90deg) translateZ(calc(var(--half-size) - 2px)); }
+.right { transform: rotateY(90deg) translateZ(calc(var(--half-size) - 2px)); }
+.top { transform: rotateX(90deg) translateZ(calc(var(--half-size) - 2px)); }
+.bottom { transform: rotateX(-90deg) translateZ(calc(var(--half-size) - 2px)); }
+
+.board {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.cell {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--body-size);
+  height: var(--body-size);
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1)),
+    var(--body);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 8px 18px rgba(0, 170, 255, 0.24),
+    0 16px 34px rgba(0, 170, 255, 0.16);
+  transform: translate(-50%, -50%) translate3d(
+    calc((var(--x) - 4) * var(--cell-size)),
+    calc((var(--y) - 4) * var(--cell-size)),
+    calc((var(--z) - 4) * var(--cell-size)),
+  );
+  transition: transform 110ms ease;
+}
+
+.cell.head {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.22)),
+    var(--head);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.orb {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--cell-size) * 0.6);
+  height: calc(var(--cell-size) * 0.6);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 34%, rgba(255, 255, 255, 0.72), transparent 68%),
+    var(--orb);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.42);
+  transform: translate(-50%, -50%) translate3d(
+    calc((var(--x) - 4) * var(--cell-size)),
+    calc((var(--y) - 4) * var(--cell-size)),
+    calc((var(--z) - 4) * var(--cell-size)),
+  );
+}
+
+@media (max-width: 880px) {
+  .site { grid-template-columns: minmax(0, 1fr); padding: 18px 16px 28px; }
+  .panel { border-radius: 14px; }
+  .stage-wrap { padding: 14px; }
+}

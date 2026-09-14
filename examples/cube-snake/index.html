@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Cube Snake — a lightweight creative 3D snake game in a translucent cube.">
+    <title>Cube Snake</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="site">
+      <section class="panel">
+        <header class="intro">
+          <p class="eyebrow">3D Snake</p>
+          <h1>立方穿行</h1>
+          <p class="lede">在透明玻璃立方体内生长，穿行，回环。</p>
+        </header>
+
+        <div class="score">
+          <div><span>分数</span><strong data-role="score">0</strong></div>
+          <div><span>长度</span><strong data-role="length">5</strong></div>
+          <div><span>最佳</span><strong data-role="best">0</strong></div>
+          <div><span>相位</span><strong data-role="phase">Prism</strong></div>
+        </div>
+
+        <div class="actions">
+          <button class="button primary" data-role="start">开始</button>
+          <button class="button" data-role="pause">暂停</button>
+          <button class="button" data-role="restart">重来</button>
+        </div>
+
+        <p class="status" data-role="status" aria-live="polite">待命</p>
+
+        <section class="help">
+          <h2>操作</h2>
+          <p>使用 <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> 控制 X/Z，<kbd>W</kbd>/<kbd>S</kbd> 控制 Y。方向键也能在待命或暂停时继续游戏。</p>
+          <p>用相机滑杆或直接拖拽立方体外轮廓，即可从任意角度观察。</p>
+          <div class="camera">
+            <label for="orbit">轨道</label>
+            <input id="orbit" type="range" min="-160" max="160" step="1" value="56">
+          </div>
+          <div class="camera">
+            <label for="pitch">俯仰</label>
+            <input id="pitch" type="range" min="-80" max="80" step="1" value="-22">
+          </div>
+        </section>
+      </section>
+
+      <section class="stage-wrap">
+        <div class="stage">
+          <div class="cube">
+            <div class="face front" aria-hidden="true"></div>
+            <div class="face back" aria-hidden="true"></div>
+            <div class="face left" aria-hidden="true"></div>
+            <div class="face right" aria-hidden="true"></div>
+            <div class="face top" aria-hidden="true"></div>
+            <div class="face bottom" aria-hidden="true"></div>
+            <div class="board" data-role="board">
+              <div class="orb" data-role="orb" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

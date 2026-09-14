@@ -28,7 +28,8 @@ Use /skills/super-skill/SKILL.md to handle: <request>
 The super-skill then chooses the narrowest applicable mode, applies the relevant domain overlays,
 and requires `validation`, `security`, and `evidence` before done.
 
-You can also read working examples in [`examples/web-snake/README.md`](examples/web-snake/README.md)
+You can also read working examples in [`examples/web-snake/README.md`](examples/web-snake/README.md),
+[`examples/cube-snake/README.md`](examples/cube-snake/README.md),
 and [`examples/story-lv/README.md`](examples/story-lv/README.md).
 
 ## Repository layout
@@ -48,6 +49,7 @@ skills/ship/               Versioned, observable, reversible release path
 skills/modules/            Frontend/backend/API/data/ops overlays
 docs/                      Research, decisions, readiness patterns
 examples/web-snake/        Static web gameplay reference example
+examples/cube-snake/       Translucent cube 3D snake gameplay reference
 examples/story-lv/         LV-inspired editorial story reference example
 ```
 
