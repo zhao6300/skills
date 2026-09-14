@@ -109,7 +109,7 @@ Apply the overlays that match the change, not all overlays on every task.
 - When no browser runner is available, record browser-only checks as `targeted` and pair them with pure-logic tests plus direct UI evidence.
 - Treat “this does not work” or “it only happens once” as evidence gaps that must be reproduced before patching; first run an actual headless interaction, not only unit checks.
 - For interactive loops, verify a time series after start/resume and over the boundary conditions idle / paused / game-over / hidden tab, not just the first step.
-- For animation, CSS position/transform, canvas, or WebGL changes, assert a rendered value (`transform`, `boundingClientRect`, pixel/screenshot diff, or composition state) changes over time; state text alone is not visible evidence.
+- For any user-visible transition, assert a rendered or observable output changed over time; state text alone is not visible evidence.
 - Prefer one animation-frame loop or one interval for recurring browser work. Avoid nested timers that can miss a pending step.
 - Keep edge-case behavior explicit (wrap, fail, retry), and pair each renderer change with a pure engine test.
 

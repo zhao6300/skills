@@ -89,5 +89,6 @@ test("evolution skill keeps learned rules narrow and verified", () => {
 
 test("super skill turns visible-motion evidence into a browser game rule", () => {
   const skill = read("../../skills/super-skill", "SKILL.md");
-  assert.match(skill, /Pixel\/screenshot diff|transform.* boundingRect|state text alone is not visible evidence/i);
+  assert.match(skill, /rendered or observable output changed over time/i);
+  assert.match(skill, /state text alone is not visible evidence/i);
 });
