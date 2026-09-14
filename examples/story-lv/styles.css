@@ -306,7 +306,6 @@ blockquote {
   .shell { inline-size: min(720px, 100% - 4rem); padding-inline: 0; }
   .masthead { grid-template-columns: minmax(0, 1fr); padding-block: 1rem 0.8rem; row-gap: 1rem; }
   .site-nav { display: flex; justify-content: space-between; }
-  .header-cta { display: none; }
   .lede { max-width: none; margin-block-end: 1.4rem; }
   .primary-cta { padding: 0.7rem 1.2rem; }
   .chapter-body { max-width: none; }
