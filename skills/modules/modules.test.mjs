@@ -1,0 +1,73 @@
+import { strict as assert } from "node:assert";
+import test from "node:test";
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const here = dirname(fileURLToPath(import.meta.url));
+
+const architectureFiles = [
+  "SKILL.md",
+  "references/frontend.md",
+  "references/backend.md",
+  "references/data.md",
+  "references/ops.md",
+  "references/agents.md",
+];
+
+const agentFiles = [
+  "SKILL.md",
+  "references/openai.md",
+  "references/google.md",
+];
+
+const read = (root, file) => readFileSync(join(here, root, file), "utf8");
+
+test("architecture skill keeps general and scenario boundaries separate", () => {
+  for (const file of architectureFiles) {
+    assert.ok(existsSync(join(here, "architecture", file)), file);
+  }
+
+  const skill = read("architecture", "SKILL.md");
+  assert.match(skill, /## Use/);
+  assert.match(skill, /## Required definition/);
+  assert.match(skill, /## Output/);
+  assert.match(skill, /## Scenario specializations/);
+  assert.match(skill, /## Verification/);
+  assert.match(skill, /Boundary \| Owner \| State \| Contract \| Transition \| Failure \| Verification \| Rollback/);
+
+  const frontend = read("architecture", "references/frontend.md");
+  const backend = read("architecture", "references/backend.md");
+  const data = read("architecture", "references/data.md");
+  const ops = read("architecture", "references/ops.md");
+  const agents = read("architecture", "references/agents.md");
+  assert.match(frontend, /state\s+ownership|component owns|UI ownership/i);
+  assert.match(backend, /service boundary|domain ownership|workers/i);
+  assert.match(data, /data ownership|schema|migration/i);
+  assert.match(ops, /deployment|rollback|run environment/i);
+  assert.match(agents, /agent|tool|output contract|failure path/i);
+});
+
+test("agents skill has contract, tool boundary and reference notes", () => {
+  for (const file of agentFiles) {
+    assert.ok(existsSync(join(here, "agents", file)), file);
+  }
+
+  const skill = read("agents", "SKILL.md");
+  assert.match(skill, /Role/);
+  assert.match(skill, /Objective/);
+  assert.match(skill, /Available tools/);
+  assert.match(skill, /State ownership/);
+  assert.match(skill, /Output schema/);
+  assert.match(skill, /Failure and escalation path/);
+  assert.match(skill, /Verification and evidence/);
+  assert.match(skill, /prompt-injection/i);
+  const openai = read("agents", "references/openai.md");
+  const google = read("agents", "references/google.md");
+  assert.match(openai, /One agent, one job/);
+  assert.match(openai, /One controller loop/);
+  assert.match(openai, /One artifact/);
+  assert.match(google, /output schema/);
+  assert.match(google, /Traceability|trace/);
+  assert.match(google, /reusable skill/);
+});
