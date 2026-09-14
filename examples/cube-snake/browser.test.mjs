@@ -38,6 +38,7 @@ test("real browser snake loop is playable and visible", async () => {
     assert.equal(await page.locator(".cell").count(), 5);
     assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector(".cell.head"), "::after").content), "\"\"");
     assert.equal(await page.locator("[data-role=status]").textContent(), "按开始或方向键");
+    assert.notEqual(await page.evaluate(() => getComputedStyle(document.querySelector(".cell.head")).transform), "none");
 
     await page.keyboard.press("ArrowRight");
     await page.waitForFunction(() => document.querySelector("[data-role=status]")?.textContent === "进行中");
@@ -46,6 +47,7 @@ test("real browser snake loop is playable and visible", async () => {
     assert.equal(await page.locator(".cell.head").count(), 1);
     assert.equal(await page.locator("[data-role=status]").textContent(), "进行中");
     assert.equal(Boolean(await page.locator("[data-role=start]").isDisabled()), true);
+    assert.notEqual(await page.evaluate(() => getComputedStyle(document.querySelector(".cell.head")).transform), "none");
     assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector(".cell.head"), "::after").content), "\"\"");
 
     await page.click("[data-role=pause]");

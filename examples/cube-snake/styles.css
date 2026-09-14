@@ -224,9 +224,9 @@ h1 {
     0 8px 18px rgba(0, 170, 255, 0.24),
     0 16px 34px rgba(0, 170, 255, 0.16);
   transform: translate(-50%, -50%) translate3d(
-    calc((var(--x) - 4) * var(--cell-size)),
-    calc((var(--y) - 4) * var(--cell-size)),
-    calc((var(--z) - 4) * var(--cell-size)),
+    calc((var(--x) - 2) * var(--cell-size)),
+    calc((var(--y) - 2) * var(--cell-size)),
+    calc((var(--z) - 2) * var(--cell-size))
   );
   transition: transform 110ms ease;
 }
@@ -269,9 +269,9 @@ h1 {
     var(--orb);
   box-shadow: 0 5px 14px rgba(0, 0, 0, 0.42);
   transform: translate(-50%, -50%) translate3d(
-    calc((var(--x) - 4) * var(--cell-size)),
-    calc((var(--y) - 4) * var(--cell-size)),
-    calc((var(--z) - 4) * var(--cell-size)),
+    calc((var(--x) - 2) * var(--cell-size)),
+    calc((var(--y) - 2) * var(--cell-size)),
+    calc((var(--z) - 2) * var(--cell-size))
   );
 }
 
