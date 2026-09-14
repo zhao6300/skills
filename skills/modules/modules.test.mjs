@@ -23,6 +23,8 @@ const agentFiles = [
 
 const evolutionFiles = ["SKILL.md"];
 
+const sourceFiles = ["SKILL.md", "references/tech-and-research.md"];
+
 const read = (root, file) => readFileSync(join(here, root, file), "utf8");
 
 test("architecture skill keeps general and scenario boundaries separate", () => {
@@ -85,6 +87,27 @@ test("evolution skill keeps learned rules narrow and verified", () => {
   assert.match(skill, /If a rule needs more, move the detail/);
   assert.match(skill, /delete any rule now covered by the new rule/);
   assert.match(skill, /do not widen an existing skill merely to justify the new rule/i);
+});
+
+test("source ingestion skill owns adapter contract and source selection", () => {
+  for (const file of sourceFiles) {
+    assert.ok(existsSync(join(here, "sources", file)), file);
+  }
+
+  const skill = read("sources", "SKILL.md");
+  assert.match(skill, /## Required definition/);
+  assert.match(skill, /## Normalized record contract/);
+  assert.match(skill, /## Adapter boundary/);
+  assert.match(skill, /## Verification/);
+  assert.match(skill, /License and terms/);
+  assert.match(skill, /`id` is stable across refreshes/);
+
+  const references = read("sources", "references/tech-and-research.md");
+  assert.match(references, /Hacker News/);
+  assert.match(references, /arXiv/);
+  assert.match(references, /OpenAlex/);
+  assert.match(references, /GitHub Search/);
+  assert.match(references, /Hugging Face Hub/);
 });
 
 test("super skill turns visible-motion evidence into a browser game rule", () => {
