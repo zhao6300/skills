@@ -41,10 +41,11 @@ test("real browser snake loop is playable and visible", async () => {
 
     await page.keyboard.press("ArrowRight");
     await page.waitForFunction(() => document.querySelector("[data-role=status]")?.textContent === "进行中");
+    await page.waitForTimeout(10000);
     assert.equal(await page.locator(".cell").count(), 5);
     assert.equal(await page.locator(".cell.head").count(), 1);
-    await page.waitForTimeout(500);
     assert.equal(await page.locator("[data-role=status]").textContent(), "进行中");
+    assert.equal(Boolean(await page.locator("[data-role=start]").isDisabled()), true);
     assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector(".cell.head"), "::after").content), "\"\"");
 
     await page.click("[data-role=pause]");

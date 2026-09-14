@@ -3,7 +3,7 @@
   --half-size: calc(var(--cube-size) / 2);
   --cell-size: calc(var(--cube-size) / 5);
   --grid-size: 5;
-  --body-size: calc(var(--cell-size) * 1.08);
+  --body-size: calc(var(--cell-size) * 1.14);
   --paper: #070b11;
   --ink: #f2feff;
   --muted: rgba(242, 254, 255, 0.66);
@@ -213,7 +213,7 @@ h1 {
   top: 50%;
   width: var(--body-size);
   height: var(--body-size);
-  border-radius: 14px;
+  border-radius: 17px;
   background:
     radial-gradient(circle at 32% 34%, rgba(255, 255, 255, 0.56) 0%, rgba(255, 255, 255, 0.14) 44%, transparent 70%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent),
@@ -236,7 +236,8 @@ h1 {
     radial-gradient(circle at 34% 36%, rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.16) 46%, transparent 68%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.24), transparent),
     var(--head);
-  border-color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.3);
+  border-radius: 18px;
 }
 
 .cell.head::before,
