@@ -21,6 +21,8 @@ const agentFiles = [
   "references/google.md",
 ];
 
+const evolutionFiles = ["SKILL.md"];
+
 const read = (root, file) => readFileSync(join(here, root, file), "utf8");
 
 test("architecture skill keeps general and scenario boundaries separate", () => {
@@ -70,4 +72,17 @@ test("agents skill has contract, tool boundary and reference notes", () => {
   assert.match(google, /output schema/);
   assert.match(google, /Traceability|trace/);
   assert.match(google, /reusable skill/);
+});
+
+test("evolution skill keeps learned rules narrow and verified", () => {
+  const skill = read("evolution", "SKILL.md");
+  assert.match(skill, /## Use/);
+  assert.match(skill, /## Contract/);
+  assert.match(skill, /## Evolution loop/);
+  assert.match(skill, /## Reuse check/);
+  assert.match(skill, /## Verification/);
+  assert.match(skill, /## Common failures/);
+  assert.match(skill, /If a rule needs more, move the detail/);
+  assert.match(skill, /delete any rule now covered by the new rule/);
+  assert.match(skill, /do not widen an existing skill merely to justify the new rule/i);
 });

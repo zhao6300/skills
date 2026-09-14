@@ -100,6 +100,7 @@ When the plan names the target modules, use the specialist skills during phases 
 | Operations | [`modules/ops/SKILL.md`](modules/ops/SKILL.md) | deploy, rollback, health, runbooks, alerts |
 | Architecture | [`modules/architecture/SKILL.md`](modules/architecture/SKILL.md) | module boundary, contract, state ownership, transition, failure/rollback |
 | Agents / autonomous workflows | [`modules/agents/SKILL.md`](modules/agents/SKILL.md) | role, objective, tool surface, output contract, evidence, escalation |
+| Evolution | [`modules/evolution/SKILL.md`](modules/evolution/SKILL.md) | narrow learned rules, reuse check and verification |
 
 Module skills do not replace the ordered phase skills; they constrain what a slice must include.
 
