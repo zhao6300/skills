@@ -18,7 +18,7 @@ function render() {
   suggestion = suggestAiMove(state);
   statusElement.textContent = selectedPoint ? "Selected" : "Ready";
   turnElement.textContent = state.turn === "red" ? "Red" : "Black";
-  aiCardElement.textContent = suggestion ? "AI suggestion available" : "No suggestion";
+  aiCardElement.textContent = suggestion ? describeAiMove(suggestion, state) : "No suggestion";
   applySuggestionButton.disabled = !suggestion;
 }
 
@@ -32,10 +32,14 @@ function renderBoard() {
       button.dataset.x = String(x);
       button.dataset.y = String(y);
       const piece = state.board[y][x];
+      const token = document.createElement("div");
+      token.className = "token";
       if (piece) {
-        button.textContent = getPieceName(piece.side, piece.type);
+        token.textContent = getPieceName(piece.side, piece.type);
         button.dataset.side = piece.side;
+        button.dataset.type = piece.type;
       }
+      button.appendChild(token);
       if (selectedPoint?.x === x && selectedPoint?.y === y) {
         button.classList.add("selected");
       }
@@ -56,7 +60,6 @@ function handleClick(x, y) {
     if (legalMoves.some((to) => to.x === x && to.y === y)) {
       state = applyMove(state, { from: selectedPoint, to: point });
       selectedPoint = null;
-      statusElement.textContent = "Moved";
     } else {
       selectedPoint = null;
       statusElement.textContent = "Illegal move";
@@ -69,6 +72,7 @@ function handleClick(x, y) {
     statusElement.textContent = "Empty point";
   }
   render();
+  statusElement.textContent = "Moved";
 }
 
 applySuggestionButton.addEventListener("click", () => {

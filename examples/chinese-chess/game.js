@@ -26,16 +26,16 @@ function createInitialBoard() {
   const board = Array.from({ length: 10 }, () => Array.from({ length: 9 }, () => null));
   const backRow = ["chariot", "horse", "elephant", "advisor", "general", "advisor", "elephant", "horse", "chariot"];
   backRow.forEach((type, x) => {
-    board[0][x] = piece("red", type);
-    board[9][x] = piece("black", type);
+    board[0][x] = piece("black", type);
+    board[9][x] = piece("red", type);
   });
-  board[2][1] = piece("red", "cannon");
-  board[2][7] = piece("red", "cannon");
-  board[7][1] = piece("black", "cannon");
-  board[7][7] = piece("black", "cannon");
+  board[2][1] = piece("black", "cannon");
+  board[2][7] = piece("black", "cannon");
+  board[7][1] = piece("red", "cannon");
+  board[7][7] = piece("red", "cannon");
   [0, 2, 4, 6, 8].forEach((x) => {
-    board[3][x] = piece("red", "soldier");
-    board[6][x] = piece("black", "soldier");
+    board[3][x] = piece("black", "soldier");
+    board[6][x] = piece("red", "soldier");
   });
   return board;
 }
@@ -251,11 +251,11 @@ export function isInside(x, y) {
 }
 
 function isInsidePalace(side, x, y) {
-  return x >= 3 && x <= 5 && (side === "red" ? y <= 2 : y >= 7);
+  return x >= 3 && x <= 5 && (side === "red" ? y >= 7 : y <= 2);
 }
 
 function hasCrossedRiver(side, y) {
-  return side === "red" ? y >= 5 : y <= 4;
+  return side === "red" ? y <= 4 : y >= 5;
 }
 
 function getPiece(state, x, y) {

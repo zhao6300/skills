@@ -31,9 +31,11 @@ test("browser can move and show AI suggestion", async () => {
     assert.equal(await page.locator("[data-role=board] .cell").count(), 90);
     assert.equal(await page.locator('[data-role=status]').textContent(), "Ready");
 
-    await page.click('[data-role="apply suggestion"]');
-    await page.waitForFunction(() => document.querySelector('[data-role=turn]')?.textContent === "Black");
-    assert.equal(await page.locator('[data-role=status]').textContent(), "AI suggestion applied");
+  await page.click('[data-x="0"][data-y="9"]');
+  await page.waitForFunction(() => document.querySelector('[data-role=status]')?.textContent === "Selected");
+  await page.click('[data-x="0"][data-y="8"]');
+  await page.waitForFunction(() => document.querySelector('[data-role=turn]')?.textContent === "Black");
+  assert.equal(await page.locator('[data-role=status]').textContent(), "Moved");
     assert.equal(Boolean(await page.locator('[data-role="apply suggestion"]').isDisabled()), false);
     assert.deepEqual(errors, []);
   } finally {

@@ -14,36 +14,36 @@ test("new game creates two balanced armies and marks the current turn", () => {
 });
 
 test("basic move rules update the board and turn", () => {
-  const next = applyMove(createGame(), { from: { x: 0, y: 0 }, to: { x: 0, y: 1 } });
-  assert.equal(pointAt(next.board, 0, 0), null);
-  assert.equal(pointAt(next.board, 0, 1).type, "chariot");
+  const next = applyMove(createGame(), { from: { x: 0, y: 9 }, to: { x: 0, y: 8 } });
+  assert.equal(pointAt(next.board, 0, 9), null);
+  assert.equal(pointAt(next.board, 0, 8).type, "chariot");
   assert.equal(next.turn, "black");
   assert.equal(getMoveHistory(next).length, 1);
 });
 
 test("chariot cannot jump over or land on its own color", () => {
-  const illegal = applyMove(createGame(), { from: { x: 1, y: 0 }, to: { x: 2, y: 1 } });
-  const legal = applyMove(createGame(), { from: { x: 0, y: 0 }, to: { x: 0, y: 1 } });
+  const illegal = applyMove(createGame(), { from: { x: 1, y: 9 }, to: { x: 2, y: 8 } });
+  const legal = applyMove(createGame(), { from: { x: 0, y: 9 }, to: { x: 0, y: 8 } });
   assert.deepEqual(illegal, createGame());
   assert.equal(getMoveHistory(legal).length, 1);
 });
 
 test("horse is blocked by a piece on its diagonal step", () => {
-  const darkCorner = applyMove(createGame(), { from: { x: 1, y: 0 }, to: { x: 2, y: 2 } });
-  assert.equal(pointAt(darkCorner.board, 2, 2).type, "horse");
+  const darkCorner = applyMove(createGame(), { from: { x: 1, y: 9 }, to: { x: 2, y: 7 } });
+  assert.equal(pointAt(darkCorner.board, 2, 7).type, "horse");
 });
 
 test("elephant cannot cross the river", () => {
-  const legal = getLegalMoves(createGame(), { x: 2, y: 0 });
-  assert.equal(legal.some(({ y }) => y <= 4), true);
-  assert.equal(legal.some(({ y }) => y >= 5), false);
+  const legal = getLegalMoves(createGame(), { x: 2, y: 9 });
+  assert.equal(legal.some(({ y }) => y <= 4), false);
+  assert.equal(legal.some(({ y }) => y >= 5), true);
 });
 
 test("illegal move preserves turn and board", () => {
   const state = createGame();
-  const next = applyMove(state, { from: { x: 1, y: 0 }, to: { x: 2, y: 1 } });
+  const next = applyMove(state, { from: { x: 1, y: 9 }, to: { x: 2, y: 8 } });
   assert.equal(next.turn, "red");
-  assert.equal(pointAt(next.board, 0, 0).type, "chariot");
+  assert.equal(pointAt(next.board, 0, 9).type, "chariot");
   assert.equal(getMoveHistory(next).length, 0);
 });
 
