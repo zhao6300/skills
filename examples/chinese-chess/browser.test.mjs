@@ -28,9 +28,11 @@ test("browser can move and show AI suggestion", async () => {
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(`http://127.0.0.1:${server.address().port}/`);
-    assert.equal(await page.locator("[data-role=board] .cell").count(), 90);
-    assert.equal(await page.locator('[data-role=status]').textContent(), "Ready");
-
+  assert.equal(await page.locator("[data-role=board] .cell").count(), 90);
+  assert.equal(await page.locator('[data-role=status]').textContent(), "Ready");
+  assert.equal(await page.locator('.token').count(), 90);
+  assert.equal(await page.locator('[data-side="red"].cell').count(), 16);
+  assert.equal(await page.locator('[data-side="black"].cell').count(), 16);
   await page.click('[data-x="0"][data-y="9"]');
   await page.waitForFunction(() => document.querySelector('[data-role=status]')?.textContent === "Selected");
   await page.click('[data-x="0"][data-y="8"]');

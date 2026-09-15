@@ -14,9 +14,10 @@ let suggestion = null;
 render();
 
 function render() {
+  const previousStatus = statusElement.textContent;
   renderBoard();
   suggestion = suggestAiMove(state);
-  statusElement.textContent = selectedPoint ? "Selected" : "Ready";
+  statusElement.textContent = selectedPoint ? "Selected" : (previousStatus === "Moved" ? "Ready" : previousStatus);
   turnElement.textContent = state.turn === "red" ? "Red" : "Black";
   aiCardElement.textContent = suggestion ? describeAiMove(suggestion, state) : "No suggestion";
   applySuggestionButton.disabled = !suggestion;
@@ -75,7 +76,9 @@ function handleClick(x, y) {
     statusElement.textContent = "Empty point";
   }
   render();
-  statusElement.textContent = "Moved";
+  if (!selectedPoint) {
+    statusElement.textContent = "Moved";
+  }
 }
 
 applySuggestionButton.addEventListener("click", () => {
