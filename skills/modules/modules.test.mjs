@@ -127,6 +127,7 @@ test("ai-first skill is a narrow product and architecture gate", () => {
   const design = read("ai-first", "references/design.md");
   assert.match(design, /Decision matrix/);
   assert.match(design, /Context/);
+  assert.match(design, /Acceptance mode/);
   assert.match(design, /Observability/);
 });
 

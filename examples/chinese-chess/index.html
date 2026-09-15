@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="AI-first Chinese chess board with move suggestions and explainability.">
+    <title>AI Chinese Chess · AI 象棋</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="page">
+      <section class="identity">
+        <p class="eyebrow">AI Chinese Chess</p>
+        <h1>AI-first Ideas in Play</h1>
+        <p class="lede">The board respects the rules; the advisor explains its next move, and the human keeps control.</p>
+      </section>
+      <section class="stage">
+        <div class="board-wrap">
+          <div class="board" data-role="board" aria-label="Chinese chess board"></div>
+        </div>
+      </section>
+      <aside class="side">
+        <section class="panel">
+          <p class="field-label">Status</p>
+          <p data-role="status" aria-live="polite">Ready</p>
+          <p class="field-label">Turn</p>
+          <p data-role="turn">Red</p>
+        </section>
+        <section class="panel">
+          <p class="field-label">AI suggestion</p>
+          <p data-role="ai-card" aria-live="polite">Loading</p>
+          <button class="primary" data-role="apply suggestion" type="button">Apply AI suggestion</button>
+        </section>
+        <section class="panel">
+          <p class="field-label">How to use</p>
+          <p>Select your piece, then click a highlighted target or use the AI suggestion.</p>
+        </section>
+      </aside>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

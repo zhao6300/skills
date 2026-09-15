@@ -10,6 +10,7 @@ Use this reference when turning an AI-first idea into an inspectable product or 
 | Architecture | Which component owns the AI boundary? | UI -> service -> data/model/tool contract |
 | Context | What data is made available? | data sources, retention, permission answer |
 | Reasoning | Which steps stay deterministic? | code-path versus reasoning path decision |
+| Acceptance mode | How does the human accept, reject, or bypass AI output? | recommendation-only, explicit submit, or manual path |
 | Verification | Which tests prove the result? | fixture, acceptance test, manual trace, or runbook |
 | Failure | What happens if output is uncertain? | fallback, retry, human-in-loop, or safe refusal |
 | Learning | What signals feed the next iteration? | feedback event, eval, or user/system metric |

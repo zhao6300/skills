@@ -1,0 +1,117 @@
+:root {
+  color-scheme: dark;
+  --panel: rgba(14, 28, 24, 0.94);
+  --board: #eddba8;
+  --border: #c89b5c;
+  --ink: #1b2421;
+  --accent: #f3c34d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: #08131c;
+  color: #f9f6ef;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  margin: 0;
+}
+
+.page {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(320px, 1fr);
+  align-items: start;
+  gap: clamp(16px, 3vw, 36px);
+  padding: clamp(20px, 4vw, 48px);
+}
+
+.identity {
+  font-size: clamp(1.2rem, 2.7vw, 2rem);
+}
+
+.stage {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.board-wrap {
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+
+.board {
+  aspect-ratio: 9 / 10;
+  background: var(--board);
+  border: 2px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 0;
+}
+
+.cell {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  display: flex;
+  font-size: clamp(0.72rem, 1.8vw, 1.05rem);
+  font-weight: 700;
+  justify-content: center;
+  position: relative;
+}
+
+.cell[data-side="red"] { color: #a02820; }
+.cell[data-side="black"] { color: #111827; }
+.cell::before {
+  border: 1px solid rgba(24,30,25,0.16);
+  content: "";
+  position: absolute;
+  inset: 22%;
+}
+
+.cell::after {
+  background: currentColor;
+  border-radius: 50%;
+  content: "";
+  height: 42%;
+  left: 29%;
+  opacity: 0.94;
+  position: absolute;
+  top: 29%;
+  width: 42%;
+}
+
+.target::before { box-shadow: 0 0 0 2px var(--accent); }
+.selected::before { background: rgba(243,195,77,0.25); }
+
+.side { display: grid; gap: 18px; }
+.panel {
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.field-label {
+  color: rgba(249,246,239,0.62);
+  font-size: 0.76rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.primary {
+  background: var(--accent);
+  border: 0;
+  border-radius: 999px;
+  color: #17150f;
+  font-weight: 700;
+  padding: 10px 16px;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .page { grid-template-columns: 1fr; }
+}
