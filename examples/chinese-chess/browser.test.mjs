@@ -10,7 +10,7 @@ const executablePath = "/root/.cache/browser/chrome-headless-shell-126/chrome-he
 const rootDir = fileURLToPath(new URL(".", import.meta.url));
 const types = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8" };
 
-test("browser can move and show AI suggestion", async () => {
+  test("browser can move and show AI suggestion", async () => {
   const server = createServer(async (request, response) => {
     const path = request.url === "/" ? "/index.html" : request.url ?? "/index.html";
     try {
@@ -29,16 +29,16 @@ test("browser can move and show AI suggestion", async () => {
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(`http://127.0.0.1:${server.address().port}/`);
   assert.equal(await page.locator("[data-role=board] .cell").count(), 90);
-  assert.equal(await page.locator('[data-role=status]').textContent(), "Ready");
-  assert.equal(await page.locator('.token').count(), 90);
+  assert.equal(await page.locator('[data-role=status]').textContent(), "请选择棋子");
+  assert.equal(await page.locator('.token').count(), 32);
   assert.equal(await page.locator('[data-side="red"].cell').count(), 16);
   assert.equal(await page.locator('[data-side="black"].cell').count(), 16);
   await page.click('[data-x="0"][data-y="9"]');
-  await page.waitForFunction(() => document.querySelector('[data-role=status]')?.textContent === "Selected");
+  await page.waitForFunction(() => document.querySelector('[data-role=status]')?.textContent === "已选中棋子");
   await page.click('[data-x="0"][data-y="8"]');
-  await page.waitForFunction(() => document.querySelector('[data-role=turn]')?.textContent === "Black");
-  assert.equal(await page.locator('[data-role=status]').textContent(), "Moved");
-    assert.equal(Boolean(await page.locator('[data-role="apply suggestion"]').isDisabled()), false);
+  await page.waitForFunction(() => document.querySelector('[data-role=turn]')?.textContent === "黑方 · 后手");
+  assert.equal(await page.locator('[data-role=status]').textContent(), "落子完成");
+  assert.equal(Boolean(await page.locator('[data-role="apply suggestion"]').isDisabled()), false);
     assert.deepEqual(errors, []);
   } finally {
     await browser.close();

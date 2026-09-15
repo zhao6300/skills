@@ -65,5 +65,8 @@ function getMoveScore(state, { from, to }) {
 export function describeAiMove(move, state) {
   const piece = state.board[move.from.y][move.from.x];
   const target = state.board[move.to.y][move.to.x];
-  return `${piece.side === "red" ? "红方" : "黑方"} AI：${piece.type} 从 (${move.from.x},${move.from.y}) 到 (${move.to.x},${move.to.y})${target ? "，吃子" : ""}。可接受，可放弃。`;
+  const sideName = piece.side === "red" ? "红方" : "黑方";
+  const pieceNames = { chariot: "车", horse: "马", elephant: piece.side === "red" ? "相" : "象", advisor: piece.side === "red" ? "仕" : "士", general: piece.side === "red" ? "帅" : "将", cannon: "炮", soldier: piece.side === "red" ? "兵" : "卒" };
+  const targetCopy = target ? "，可吃子" : "";
+  return `${sideName} AI 推荐：${pieceNames[piece.type] ?? piece.type} 从 (${move.from.x},${move.from.y}) 到 (${move.to.x},${move.to.y})${targetCopy}。`;
 }

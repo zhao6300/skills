@@ -13,12 +13,11 @@ let suggestion = null;
 
 render();
 
-function render() {
-  const previousStatus = statusElement.textContent;
+function render(statusMessage) {
   renderBoard();
   suggestion = suggestAiMove(state);
-  statusElement.textContent = selectedPoint ? "Selected" : (previousStatus === "Moved" ? "Ready" : previousStatus);
-  turnElement.textContent = state.turn === "red" ? "Red" : "Black";
+  statusElement.textContent = statusMessage ?? "请选择棋子";
+  turnElement.textContent = state.turn === "red" ? "红方 · 先手" : "黑方 · 后手";
   aiCardElement.textContent = suggestion ? describeAiMove(suggestion, state) : "No suggestion";
   applySuggestionButton.disabled = !suggestion;
 }
@@ -33,24 +32,22 @@ function renderBoard() {
       button.dataset.x = String(x);
       button.dataset.y = String(y);
       const piece = state.board[y][x];
-      const token = document.createElement("div");
-      token.className = "token";
       if (piece) {
+        const token = document.createElement("div");
+        token.className = "token";
         token.dataset.side = piece.side;
-      }
-      if (piece) {
         token.textContent = getPieceName(piece.side, piece.type);
         button.dataset.side = piece.side;
         button.dataset.type = piece.type;
+        button.appendChild(token);
       }
-      button.appendChild(token);
       if (selectedPoint?.x === x && selectedPoint?.y === y) {
         button.classList.add("selected");
       }
       if (selectedPoint && getLegalMoves(state, selectedPoint).some((to) => to.x === x && to.y === y)) {
         button.classList.add("target");
       }
-      button.addEventListener("click", () => handleClick(x, y));
+  button.addEventListener("click", () => handleClick(x, y));
       cells.push(button);
     }
   }
@@ -59,32 +56,30 @@ function renderBoard() {
 
 function handleClick(x, y) {
   const point = { x, y };
+  let statusMessage;
   if (selectedPoint) {
     const legalMoves = getLegalMoves(state, selectedPoint);
     if (legalMoves.some((to) => to.x === x && to.y === y)) {
       state = applyMove(state, { from: selectedPoint, to: point });
       selectedPoint = null;
+      statusMessage = "落子完成";
     } else {
       selectedPoint = null;
-      statusElement.textContent = "Illegal move";
+      statusMessage = "非法走位，请选择棋子或高亮目标。";
     }
   } else if (state.board[y][x]) {
     selectedPoint = point;
-    statusElement.textContent = "Selected";
+    statusMessage = "已选中棋子";
   } else {
     selectedPoint = null;
-    statusElement.textContent = "Empty point";
+    statusMessage = "空点，请选择棋子起手。";
   }
-  render();
-  if (!selectedPoint) {
-    statusElement.textContent = "Moved";
-  }
+  render(statusMessage);
 }
 
 applySuggestionButton.addEventListener("click", () => {
   if (!suggestion) return;
   state = applyMove(state, { from: suggestion.from, to: suggestion.to });
   selectedPoint = null;
-  render();
-  statusElement.textContent = "AI suggestion applied";
+  render("已采用 AI 建议");
 });

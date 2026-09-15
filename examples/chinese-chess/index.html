@@ -5,37 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="AI-first Chinese chess board with move suggestions and explainability.">
     <title>AI Chinese Chess · AI 象棋</title>
-    <link rel="stylesheet" href="./styles.css">
-  </head>
+  <link rel="stylesheet" href="./styles.css">
+</head>
   <body>
-    <main class="page">
-      <section class="identity">
-        <p class="eyebrow">AI Chinese Chess</p>
-        <h1>AI-first Chinese Chess</h1>
-        <p class="lede">The board respects the rules; the advisor explains its next move, and the human keeps control.</p>
-      </section>
-      <section class="stage">
-        <div class="board-wrap">
-          <div class="board" data-role="board" aria-label="Chinese chess board"></div>
+    <main class="shell">
+      <header class="masthead">
+        <div class="masthead-copy">
+          <p class="eyebrow">AI FIRST · 决策助手</p>
+          <h1>中国象棋</h1>
         </div>
+        <p class="masthead-note">AI 识别下一步棋路，规则引擎与最终落子由人掌控。</p>
+      </header>
+      <section class="page">
+        <section class="board-stage" aria-label="棋盘">
+          <div class="board-frame">
+            <div class="board" data-role="board" aria-label="九路乘十路中国象棋棋盘"></div>
+            <p class="river" aria-hidden="true">楚河 · 汉界</p>
+          </div>
+        </section>
+        <aside class="side">
+          <section class="panel primary-panel">
+            <div class="panel-heading">
+              <span class="field-label">当前回合</span>
+              <span class="turn" data-role="turn">红方 · 先手</span>
+            </div>
+            <p class="field-label">行动状态</p>
+            <p class="status" data-role="status" aria-live="polite">Ready</p>
+          </section>
+          <section class="panel ai-panel" aria-labelledby="ai-heading">
+            <div class="panel-heading">
+              <h2 id="ai-heading" class="panel-title">AI 建议棋路</h2>
+              <span class="control-badge">推荐 · 可拒绝</span>
+            </div>
+            <p class="ai-copy" data-role="ai-card" aria-live="polite">Loading</p>
+            <button class="primary" data-role="apply suggestion" type="button">采用 AI 建议</button>
+          </section>
+          <section class="panel muted-panel">
+            <p class="field-label">操 作</p>
+            <p class="help-copy">选择棋子，点击高亮格落子；AI 只显示建议，不会自动取代先手。</p>
+          </section>
+        </aside>
       </section>
-      <aside class="side">
-        <section class="panel">
-          <p class="field-label">Status</p>
-          <p data-role="status" aria-live="polite">Ready</p>
-          <p class="field-label">Turn</p>
-          <p data-role="turn">Red</p>
-        </section>
-        <section class="panel">
-          <p class="field-label">AI suggestion</p>
-          <p data-role="ai-card" aria-live="polite">Loading</p>
-          <button class="primary" data-role="apply suggestion" type="button">Apply AI suggestion</button>
-        </section>
-        <section class="panel">
-          <p class="field-label">How to use</p>
-          <p>Select your piece, then click a highlighted target or use the AI suggestion.</p>
-        </section>
-      </aside>
     </main>
     <script type="module" src="./app.js"></script>
   </body>
