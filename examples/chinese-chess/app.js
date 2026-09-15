@@ -35,6 +35,9 @@ function renderBoard() {
       const token = document.createElement("div");
       token.className = "token";
       if (piece) {
+        token.dataset.side = piece.side;
+      }
+      if (piece) {
         token.textContent = getPieceName(piece.side, piece.type);
         button.dataset.side = piece.side;
         button.dataset.type = piece.type;
