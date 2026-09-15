@@ -32,6 +32,25 @@ Adapt the depth to blast radius: a small local edit may need a note plus the act
 
 Three cross-cutting gates determine whether the selected mode may close. They are not extra phases to run after the work; design and execute with them during the applicable stages. When a gate is not applicable, record why rather than silently skipping it.
 
+### AI-first
+
+For product, architecture, API, data, agent-flow, or workflow changes, add this fourth
+gate before implementation. Use [`modules/ai-first/SKILL.md`](../modules/ai-first/SKILL.md).
+
+1. Name the decision or user action the AI path changes.
+2. Define the tool, context, permission, and output boundary.
+3. Name the deterministic fallback for uncertain, blocked, or unsafe outcomes.
+4. Record how the AI output is learned from real results.
+5. If no AI role can be shown, write a concrete `ai-first: not applicable` reason rather
+   than adding a decorative chat surface.
+
+Minimum AI-first record:
+
+```markdown
+| Decision | AI-first role | Context | Boundaries | Fallback | Verification | Learning loop |
+| --- | --- | --- | --- | --- | --- | --- |
+```
+
 ### Validation
 
 Prove that the behavior matches the contract, not that the model/reviewer believes the work looks reasonable.

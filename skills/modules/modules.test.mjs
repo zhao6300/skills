@@ -25,6 +25,8 @@ const evolutionFiles = ["SKILL.md"];
 
 const sourceFiles = ["SKILL.md", "references/tech-and-research.md"];
 
+const aiFirstFiles = ["SKILL.md", "references/design.md"];
+
 const read = (root, file) => readFileSync(join(here, root, file), "utf8");
 
 test("architecture skill keeps general and scenario boundaries separate", () => {
@@ -110,8 +112,27 @@ test("source ingestion skill owns adapter contract and source selection", () => 
   assert.match(references, /Hugging Face Hub/);
 });
 
+test("ai-first skill is a narrow product and architecture gate", () => {
+  for (const file of aiFirstFiles) {
+    assert.ok(existsSync(join(here, "ai-first", file)), file);
+  }
+
+  const skill = read("ai-first", "SKILL.md");
+  assert.match(skill, /## Design loop/);
+  assert.match(skill, /## Required definition/);
+  assert.match(skill, /## Required coverage/);
+  assert.match(skill, /ai-first: not applicable/);
+  assert.match(skill, /learning loop/i);
+
+  const design = read("ai-first", "references/design.md");
+  assert.match(design, /Decision matrix/);
+  assert.match(design, /Context/);
+  assert.match(design, /Observability/);
+});
+
 test("super skill turns visible-motion evidence into a browser game rule", () => {
   const skill = read("../../skills/super-skill", "SKILL.md");
   assert.match(skill, /rendered or observable output changed over time/i);
   assert.match(skill, /state text alone is not visible evidence/i);
+  assert.match(skill, /### AI-first/);
 });
