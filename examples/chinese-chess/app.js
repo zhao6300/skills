@@ -6,10 +6,12 @@ const statusElement = document.querySelector('[data-role="status"]');
 const turnElement = document.querySelector('[data-role="turn"]');
 const aiCardElement = document.querySelector('[data-role="ai-card"]');
 const applySuggestionButton = document.querySelector('[data-role="apply suggestion"]');
+const modeButtons = document.querySelectorAll('[data-mode]');
 
 let state = createGame();
 let selectedPoint = null;
 let suggestion = null;
+let mode = "two-player";
 
 render();
 
@@ -60,6 +62,12 @@ function renderBoard() {
 function handleClick(x, y) {
   const point = { x, y };
   let statusMessage;
+  if (!selectedPoint && state.board[y][x] && state.board[y][x].side !== state.turn) {
+    selectedPoint = null;
+    statusMessage = "请先选择当前回合棋子";
+    render(statusMessage);
+    return;
+  }
   if (selectedPoint) {
     const legalMoves = getLegalMoves(state, selectedPoint);
     if (legalMoves.some((to) => to.x === x && to.y === y)) {
@@ -78,6 +86,7 @@ function handleClick(x, y) {
     statusMessage = "空点，请选择棋子起手。";
   }
   render(statusMessage);
+  maybePlayAiMove();
 }
 
 applySuggestionButton.addEventListener("click", () => {
@@ -86,3 +95,31 @@ applySuggestionButton.addEventListener("click", () => {
   selectedPoint = null;
   render("已采用 AI 建议");
 });
+
+modeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    if (button.dataset.mode === mode) return;
+    mode = button.dataset.mode;
+    selectedPoint = null;
+    updateModeButtons();
+    maybePlayAiMove();
+    render(mode === "human-ai" ? "AI 对手已启用" : "双人轮流模式");
+  });
+});
+
+function updateModeButtons() {
+  modeButtons.forEach((button) => {
+    const active = button.dataset.mode === mode;
+    button.classList.toggle("selected", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function maybePlayAiMove() {
+  if (mode !== "human-ai" || state.turn !== "black") return;
+  const move = suggestAiMove(state);
+  if (!move) return;
+  state = applyMove(state, move);
+  selectedPoint = null;
+  render("AI 已回应");
+}

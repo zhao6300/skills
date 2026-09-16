@@ -289,6 +289,38 @@ body[data-render="cute"] .token .face::after {
   position: absolute;
 }
 
+.mode-panel::after {
+  border-color: rgba(229,200,158,.14);
+}
+
+.mode-row {
+  display: grid;
+  gap: 8px;
+}
+
+.mode {
+  background: rgba(229,200,158,.06);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: .92rem;
+  font-weight: 700;
+  padding: 11px 12px;
+  transition: filter .18s ease, border-color .18s ease, color .18s ease;
+}
+
+.mode:hover {
+  color: var(--accent);
+  filter: brightness(1.08);
+}
+
+.mode.selected {
+  background: rgba(229,200,158,.14);
+  border-color: rgba(229,200,158,.38);
+  color: var(--accent);
+}
+
 .ai-panel {
   border-color: rgba(229, 200, 158, .28);
 }

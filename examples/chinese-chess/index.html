@@ -44,6 +44,15 @@
             <p class="field-label">操 作</p>
             <p class="help-copy">选择棋子，点击高亮格落子；AI 只显示建议，不会自动取代先手。</p>
           </section>
+          <section class="panel mode-panel" aria-labelledby="mode-heading">
+            <div class="panel-heading">
+              <h2 id="mode-heading" class="panel-title">对局模式</h2>
+            </div>
+            <div class="mode-row" role="group" aria-labelledby="mode-heading">
+              <button type="button" class="mode selected" data-mode="two-player" aria-pressed="true">双人轮流</button>
+              <button type="button" class="mode" data-mode="human-ai" aria-pressed="false">人机对手</button>
+            </div>
+          </section>
         </aside>
       </section>
     </main>
