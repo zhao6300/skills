@@ -27,6 +27,15 @@ body {
   min-height: 100vh;
 }
 
+body[data-render="cute"] {
+  --bg: #1c2739;
+  --panel: #27354f;
+  --ink: #fff7ec;
+  --muted: #c8d7e6;
+  --accent: #ffd166;
+  --board-width: min(620px, calc(100vw - 40px));
+}
+
 .shell {
   margin: 0 auto;
   max-width: 1190px;
@@ -181,6 +190,47 @@ body {
   position: absolute;
   transition: box-shadow .18s ease, opacity .18s ease;
   z-index: 2;
+}
+
+body[data-render="cute"] .token {
+  background-color: var(--ivory);
+  background-image:
+    radial-gradient(circle at 50% 20%, rgba(255,255,255,.18) 0%, transparent 48%),
+    radial-gradient(circle at 50% 95%, rgba(0,0,0,.16) 0%, transparent 48%);
+  border-color: rgba(255,255,255,.22);
+  box-shadow:
+    0 8px 16px rgba(0,0,0,.35),
+    inset 0 2px 4px rgba(255,255,255,.28),
+    inset 0 -3px 5px rgba(0,0,0,.25);
+}
+
+body[data-render="cute"] .token .face {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 60% 20%, rgba(255,255,255,.12) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body[data-render="cute"] .token .face::before,
+body[data-render="cute"] .token .face::after {
+  content: "";
+  position: absolute;
+  width: 9%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+body[data-render="cute"] .token .face::before {
+  left: 20%;
+  top: 22%;
+}
+
+body[data-render="cute"] .token .face::after {
+  right: 20%;
+  top: 22%;
 }
 
 .token::before {

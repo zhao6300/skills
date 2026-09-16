@@ -39,6 +39,9 @@ function renderBoard() {
         token.textContent = getPieceName(piece.side, piece.type);
         button.dataset.side = piece.side;
         button.dataset.type = piece.type;
+        const face = document.createElement("span");
+        face.className = "face";
+        token.append(face);
         button.appendChild(token);
       }
       if (selectedPoint?.x === x && selectedPoint?.y === y) {

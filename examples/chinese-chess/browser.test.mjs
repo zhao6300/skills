@@ -31,6 +31,7 @@ const types = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=
   assert.equal(await page.locator("[data-role=board] .cell").count(), 90);
   assert.equal(await page.locator('[data-role=status]').textContent(), "请选择棋子");
   assert.equal(await page.locator('.token').count(), 32);
+  assert.equal(await page.locator('.token .face').count(), 32);
   assert.equal(await page.locator('[data-side="red"].cell').count(), 16);
   assert.equal(await page.locator('[data-side="black"].cell').count(), 16);
   await page.click('[data-x="0"][data-y="9"]');
