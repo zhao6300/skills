@@ -62,13 +62,11 @@ export function getPieceName(side, type) {
 export function getLegalMoves(state, from) {
   const source = getPiece(state, from?.x, from?.y);
   if (!source || isDestroyed(state, source.side)) return [];
-  const nextOpponentColor = source.side === "red" ? "black" : "red";
   return getMoveTargets(state, from).filter((to) => {
     if (!isPointInBounds(state, to.x, to.y)) return false;
     if (getPiece(state, to.x, to.y)?.side === source.side) return false;
-    if (source.type === "general" && isGeneralInCheckAfterMove(state, source, from, to)) return false;
-    if (source.type !== "general" && isPointNearKing(to, findKing(state, nextOpponentColor))) return false;
-    if (source.type === "general" && isPointNearKing(to, findKing(state, nextOpponentColor))) return false;
+    if (getPiece(state, to.x, to.y)?.type === "general") return false;
+    if (leavesKingInCheck(state, source.side, from, to)) return false;
     return true;
   });
 }
@@ -182,19 +180,18 @@ function cannonTargets(state, from) {
   const screenPiece = getPiece(state, from.x, from.y);
   const cannonColor = screenPiece?.side;
   [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => {
-    let screens = 0;
+    let hasScreen = false;
     let x = from.x + dx;
     let y = from.y + dy;
     while (isInside(x, y)) {
-      if (state.board[y][x]) {
-        if (screens === 1 && state.board[y][x].side !== cannonColor) {
-          targets.push({ x, y });
-        }
-        screens += 1;
-      } else if (screens === 1) {
-        targets.push({ x, y });
-      } else if (screens === 0) {
-        targets.push({ x, y });
+      const piece = state.board[y][x];
+      if (!piece) {
+        if (!hasScreen) targets.push({ x, y });
+      } else if (hasScreen) {
+        if (piece.side !== cannonColor) targets.push({ x, y });
+        return;
+      } else {
+        hasScreen = true;
       }
       x += dx;
       y += dy;
@@ -205,7 +202,7 @@ function cannonTargets(state, from) {
 
 function soldierTargets(state, from, piece) {
   const targets = [];
-  const forward = piece.side === "red" ? 1 : -1;
+  const forward = piece.side === "red" ? -1 : 1;
   const yAhead = from.y + forward;
   if (isInside(from.x, yAhead) && getPiece(state, from.x, yAhead)?.side !== piece.side) {
     targets.push({ x: from.x, y: yAhead });
@@ -231,19 +228,31 @@ export function applyMove(state, move) {
   const nextBoard = boardWithout(state.board, from.x, from.y);
   const target = getPiece(state, to.x, to.y);
   nextBoard[to.y][to.x] = piece;
+  const nextSide = piece.side === "red" ? "black" : "red";
   return {
     board: nextBoard,
-    turn: piece.side === "red" ? "black" : "red",
+    turn: nextSide,
     moveHistory: [...state.moveHistory, { from: { x: from.x, y: from.y }, to: { x: to.x, y: to.y } }],
     captured: target ? [...state.captured, target] : state.captured,
     lastMove: { from: { x: from.x, y: from.y }, to: { x: to.x, y: to.y } },
-    winner: null,
-    gameOver: false,
+    ...(finishMove({ board: nextBoard, turn: nextSide }, piece.side)),
   };
 }
 
 export function getMoveHistory(state) {
   return state.moveHistory ?? [];
+}
+
+export function getGameStatus(state) {
+  if (!state?.board || state.gameOver) {
+    return {
+      gameOver: Boolean(state?.gameOver),
+      winner: state?.winner ?? null,
+      checkedSide: null,
+    };
+  }
+  const checkedSide = state.turn && isKingInCheck(state, state.turn) ? state.turn : null;
+  return { gameOver: false, winner: null, checkedSide };
 }
 
 export function isInside(x, y) {
@@ -306,4 +315,50 @@ function hasClearColumnBetween(state, from, to) {
 
 function isDestroyed(state, side) {
   return !findKing(state, side);
+}
+
+function finishMove(nextState, movingSide) {
+  const checkedSide = isKingInCheck(nextState, nextState.turn) ? nextState.turn : null;
+  if (hasAnyLegalMove(nextState, nextState.turn)) {
+    return { winner: null, gameOver: false, checkedSide };
+  }
+  return { winner: movingSide, gameOver: true, checkedSide: null };
+}
+
+function hasAnyLegalMove(state, side) {
+  for (let y = 0; y < 10; y += 1) {
+    for (let x = 0; x < 9; x += 1) {
+      const piece = state.board[y][x];
+      if (!piece || piece.side !== side) continue;
+      if (getLegalMoves({ ...state, turn: side }, { x, y }).length > 0) return true;
+    }
+  }
+  return false;
+}
+
+function leavesKingInCheck(state, side, from, to) {
+  const nextBoard = boardWithout(state.board, from.x, from.y);
+  nextBoard[to.y][to.x] = getPiece(state, from.x, from.y);
+  return isKingInCheck({ board: nextBoard }, side);
+}
+
+function isKingInCheck(state, side) {
+  const king = findKing(state, side);
+  if (!king) return true;
+  for (let y = 0; y < 10; y += 1) {
+    for (let x = 0; x < 9; x += 1) {
+      const piece = state.board[y][x];
+      if (!piece || piece.side === side) continue;
+      if (pieceAttacksSquare(state, { ...piece, x, y }, king)) return true;
+    }
+  }
+  return false;
+}
+
+function pieceAttacksSquare(state, piece, target) {
+  if (piece.type === "general") {
+    return piece.x === target.x && hasClearColumnBetween(state, { x: piece.x, y: piece.y }, target);
+  }
+  return getMoveTargets(state, { x: piece.x, y: piece.y })
+    .some((to) => to.x === target.x && to.y === target.y);
 }

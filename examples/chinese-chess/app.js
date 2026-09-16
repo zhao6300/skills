@@ -1,4 +1,4 @@
-import { applyMove, createGame, getLegalMoves, getPieceName, getPieceValues } from "./game.js";
+import { applyMove, createGame, getGameStatus, getLegalMoves, getPieceName, getPieceValues } from "./game.js";
 import { describeAiMove, suggestAiMove } from "./ai.js";
 
 const boardElement = document.querySelector('[data-role="board"]');
@@ -18,7 +18,13 @@ render();
 function render(statusMessage) {
   renderBoard();
   suggestion = suggestAiMove(state);
-  statusElement.textContent = statusMessage ?? "请选择棋子";
+  const gameState = getGameStatus(state);
+  const defaultStatus = gameState.gameOver
+    ? `${gameState.winner === "red" ? "红方" : "黑方"}胜利`
+    : gameState.checkedSide
+      ? `${gameState.checkedSide === "red" ? "红方" : "黑方"}被将军`
+      : "请选择棋子";
+  statusElement.textContent = statusMessage && !gameState.gameOver ? statusMessage : defaultStatus;
   turnElement.textContent = state.turn === "red" ? "红方 · 先手" : "黑方 · 后手";
   aiCardElement.textContent = suggestion ? describeAiMove(suggestion, state) : "No suggestion";
   applySuggestionButton.disabled = !suggestion;

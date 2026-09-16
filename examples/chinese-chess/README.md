@@ -24,3 +24,6 @@ node --test examples/chinese-chess/browser.test.mjs
 `ARCHITECTURE.md` separates rule ownership from AI recommending, and `DESIGN.md` states
 that AI can only suggest; the user must take an action. That preserves an AI-first loop
 without an opaque agent.
+
+Rules implemented by the pure engine include forward-only soldiers, one-screen cannon
+captures, blocked horse legs, king safety, flying generals, check, checkmate, and stalemate.

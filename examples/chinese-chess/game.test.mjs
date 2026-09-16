@@ -1,7 +1,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { applyMove, createGame, getLegalMoves, getMoveHistory } from "./game.js";
+import { applyMove, createGame, getGameStatus, getLegalMoves, getMoveHistory } from "./game.js";
 
 test("new game creates two balanced armies and marks the current turn", () => {
   const state = createGame();
@@ -49,4 +49,97 @@ test("illegal move preserves turn and board", () => {
 
 function pointAt(board, x, y) {
   return board[y]?.[x];
+}
+
+test("soldiers advance toward the opposite river and never retreat", () => {
+  const state = createGame();
+  const redMoves = getLegalMoves(state, { x: 0, y: 6 });
+  const blackMoves = getLegalMoves(state, { x: 0, y: 3 });
+  assert.deepEqual(redMoves, [{ x: 0, y: 5 }]);
+  assert.deepEqual(blackMoves, [{ x: 0, y: 4 }]);
+  const redBoard = state.board.map(row => row.map(() => null));
+  redBoard[4][0] = { side: "red", type: "soldier" };
+  redBoard[9][4] = { side: "red", type: "general" };
+  redBoard[0][4] = { side: "black", type: "general" };
+  redBoard[5][0] = { side: "red", type: "chariot" };
+  redBoard[5][4] = { side: "red", type: "chariot" };
+  const moves = getLegalMoves({ ...state, board: redBoard }, { x: 0, y: 4 });
+  assert.deepEqual(moves, [{ x: 0, y: 3 }, { x: 1, y: 4 }]);
+});
+
+test("cannon requires exactly one screen before capturing", () => {
+  const state = createGame();
+  const board = state.board.map(row => row.map(() => null));
+  board[9][0] = { side: "red", type: "general" };
+  board[0][0] = { side: "black", type: "general" };
+  board[5][0] = { side: "red", type: "chariot" };
+  board[7][4] = { side: "red", type: "cannon" };
+  board[4][4] = { side: "red", type: "soldier" };
+  board[0][4] = { side: "black", type: "chariot" };
+  const moves = getLegalMoves({ ...state, board }, { x: 4, y: 7 });
+  assert.equal(moves.some(move => move.y === 0), true);
+  const noScreen = moves.some(move => move.y >= 1 && move.y <= 3);
+  assert.equal(noScreen, false);
+});
+
+test("kings cannot expose each other on an open file", () => {
+  const state = createGame();
+  const board = state.board.map(row => row.map(() => null));
+  board[0][4] = { side: "black", type: "general" };
+  board[1][4] = { side: "black", type: "advisor" };
+  board[9][4] = { side: "red", type: "general" };
+  const exposed = { ...state, board };
+  assert.deepEqual(getLegalMoves(exposed, { x: 4, y: 1 }), []);
+  assert.equal(getGameStatus(exposed).checkedSide, null);
+});
+
+test("a checked opponent with no safe response is checkmated", () => {
+  const state = createGame();
+  const board = state.board.map(row => row.map(() => null));
+  board[0][4] = { side: "black", type: "general" };
+  board[1][4] = { side: "black", type: "advisor" };
+  board[2][3] = { side: "red", type: "horse" };
+  board[0][0] = { side: "red", type: "chariot" };
+  board[0][8] = { side: "red", type: "chariot" };
+  board[3][3] = { side: "red", type: "chariot" };
+  board[3][5] = { side: "red", type: "chariot" };
+  board[4][3] = { side: "red", type: "chariot" };
+  board[4][5] = { side: "red", type: "chariot" };
+  board[5][3] = { side: "red", type: "chariot" };
+  board[5][5] = { side: "red", type: "chariot" };
+  board[9][4] = { side: "red", type: "general" };
+  const checked = { ...state, board, turn: "black" };
+  const legalMoves = [];
+  for (let x = 0; x < 9; x += 1) {
+    const piece = checked.board[0][x];
+    if (piece?.side === "black") legalMoves.push(...getLegalMoves(checked, { x, y: 0 }));
+  }
+  for (let x = 0; x < 9; x += 1) {
+    const piece = checked.board[1][x];
+    if (piece?.side === "black") legalMoves.push(...getLegalMoves(checked, { x, y: 1 }));
+  }
+  assert.deepEqual(legalMoves, []);
+  assert.equal(getGameStatus(checked).checkedSide, "black");
+});
+
+test("a state with no legal move ends the game by stalemate when reached", () => {
+  const state = createGame();
+  const board = state.board.map(row => row.map(() => null));
+  board[0][4] = { side: "black", type: "general" };
+  board[1][4] = { side: "black", type: "advisor" };
+  board[1][3] = { side: "red", type: "soldier" };
+  board[1][5] = { side: "red", type: "soldier" };
+  board[3][3] = { side: "red", type: "chariot" };
+  board[3][5] = { side: "red", type: "chariot" };
+  board[9][4] = { side: "red", type: "general" };
+  const next = applyMove({ ...state, board }, { from: { x: 3, y: 3 }, to: { x: 3, y: 2 } });
+  assert.equal(next.gameOver, true);
+  assert.equal(next.winner, "red");
+  assert.equal(getGameStatus(next).checkedSide, null);
+});
+
+function withBoard(state, placement) {
+  const board = state.board.map(row => row.map(() => null));
+  board[placement.y][placement.x] = placement.piece;
+  return { ...state, board };
 }
