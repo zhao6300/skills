@@ -232,8 +232,8 @@ export function applyMove(state, move) {
   return {
     board: nextBoard,
     turn: nextSide,
-    moveHistory: [...state.moveHistory, { from: { x: from.x, y: from.y }, to: { x: to.x, y: to.y } }],
-    captured: target ? [...state.captured, target] : state.captured,
+    moveHistory: [...(state.moveHistory ?? []), { from: { x: from.x, y: from.y }, to: { x: to.x, y: to.y } }],
+    captured: target ? [...(state.captured ?? []), target] : (state.captured ?? []),
     lastMove: { from: { x: from.x, y: from.y }, to: { x: to.x, y: to.y } },
     ...(finishMove({ board: nextBoard, turn: nextSide }, piece.side)),
   };
