@@ -6,6 +6,7 @@ const statusElement = document.querySelector('[data-role="status"]');
 const turnElement = document.querySelector('[data-role="turn"]');
 const aiCardElement = document.querySelector('[data-role="ai-card"]');
 const applySuggestionButton = document.querySelector('[data-role="apply suggestion"]');
+const restartButton = document.querySelector('[data-role="restart"]');
 const modeButtons = document.querySelectorAll('[data-mode]');
 
 let state = createGame();
@@ -20,14 +21,17 @@ function render(statusMessage) {
   suggestion = suggestAiMove(state);
   const gameState = getGameStatus(state);
   const defaultStatus = gameState.gameOver
-    ? `${gameState.winner === "red" ? "红方" : "黑方"}胜利`
+    ? gameState.winner
+      ? `${gameState.winner === "red" ? "红方" : "黑方"}胜利`
+      : "双方和棋"
     : gameState.checkedSide
       ? `${gameState.checkedSide === "red" ? "红方" : "黑方"}被将军`
       : "请选择棋子";
   statusElement.textContent = statusMessage && !gameState.gameOver ? statusMessage : defaultStatus;
   turnElement.textContent = state.turn === "red" ? "红方 · 先手" : "黑方 · 后手";
   aiCardElement.textContent = suggestion ? describeAiMove(suggestion, state) : "No suggestion";
-  applySuggestionButton.disabled = !suggestion;
+  applySuggestionButton.disabled = !suggestion || gameState.gameOver;
+  restartButton.textContent = gameState.gameOver ? "查看平局 / 重开" : "重新开始完整对局";
 }
 
 function renderBoard() {
@@ -111,6 +115,14 @@ modeButtons.forEach((button) => {
     maybePlayAiMove();
     render(mode === "human-ai" ? "AI 对手已启用" : "双人轮流模式");
   });
+});
+
+restartButton.addEventListener("click", () => {
+  state = createGame();
+  selectedPoint = null;
+  mode = "two-player";
+  updateModeButtons();
+  render("已重新开始完整对局");
 });
 
 function updateModeButtons() {

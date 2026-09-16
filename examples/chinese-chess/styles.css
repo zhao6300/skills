@@ -417,6 +417,25 @@ body[data-render="cute"] .token .face::after {
   opacity: .56;
 }
 
+.ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 247, 236, .22);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: .92rem;
+  letter-spacing: .08em;
+  margin-top: 12px;
+  padding: 10px 16px;
+  transition: color .18s ease, border-color .18s ease;
+  width: 100%;
+}
+
+.ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 @media (max-width: 1040px) {
   .shell { padding: 26px 30px; }
   .page { grid-template-columns: minmax(0, 1fr) 288px; gap: 20px; }

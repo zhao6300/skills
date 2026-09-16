@@ -77,3 +77,51 @@ test("AI opponent can answer a human move", async () => {
     server.close();
   }
 });
+
+test("browser can restart and complete an AI-vs-AI game", async () => {
+  const server = createServer(async (request, response) => {
+    const path = request.url === "/" ? "/index.html" : request.url ?? "/index.html";
+    try {
+      response.setHeader("Content-Type", types[extname(path)] ?? "application/octet-stream");
+      response.end(await readFile(join(rootDir, path)));
+    } catch {
+      response.statusCode = 404;
+      response.end("Not found");
+    }
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const browser = await chromium.launch({ executablePath, args: ["--no-sandbox", "--disable-gpu", "--headless"] });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1000, height: 900 } });
+    const errors = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.goto(`http://127.0.0.1:${server.address().port}/`);
+    assert.equal(await page.locator("[data-role=board] .cell").count(), 90);
+    assert.equal(await page.locator(".token").count(), 32);
+    await page.click('[data-role="restart"]');
+    await page.waitForFunction(() => document.querySelector('[data-role=status]')?.textContent === "已重新开始完整对局");
+    assert.equal(await page.locator(".token").count(), 32);
+
+    let result = "";
+    for (let moveIndex = 0; moveIndex < 200; moveIndex += 1) {
+      const suggestionDisabled = await page.locator('[data-role="apply suggestion"]').isDisabled();
+      assert.equal(suggestionDisabled, false);
+      const turnBefore = await page.locator('[data-role="turn"]').textContent();
+      await page.click('[data-role="apply suggestion"]');
+      await page.waitForFunction((expectedTurn) => document.querySelector('[data-role=turn]')?.textContent !== expectedTurn, turnBefore);
+      result = await page.locator('[data-role="status"]').textContent();
+      if (/胜利$|和棋$/.test(result)) break;
+    }
+    assert.match(result, /胜利$|和棋$/);
+    assert.equal(await page.locator('[data-role="apply suggestion"]').isDisabled(), true);
+    await page.click('[data-role="restart"]');
+    await page.waitForFunction(() => document.querySelector('[data-role=status]')?.textContent === "已重新开始完整对局");
+    assert.equal(await page.locator('[data-role="turn"]').textContent(), "红方 · 先手");
+    assert.equal(await page.locator(".token").count(), 32);
+    assert.equal(await page.locator('[data-role="board"] .cell').count(), 90);
+    assert.deepEqual(errors, []);
+  } finally {
+    await browser.close();
+    server.close();
+  }
+});
