@@ -56,3 +56,4 @@ Record the exact commands and evidence. A skipped gate needs a named reason and 
 - At least one failure path and one unauthorized actor have tests.
 - No test was edited only to make a failure disappear.
 - Commands are deterministic enough to run again.
+- Do not claim done from reasoning alone when a runnable final validation still exists.

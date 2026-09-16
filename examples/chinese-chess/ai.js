@@ -8,21 +8,76 @@ const PIECE_VALUES = {
   soldier: 10,
 };
 
-import { getLegalMoves } from "./game.js";
+import { applyMove, getLegalMoves, getGameStatus, getPieceValues } from "./game.js";
 
 export function suggestAiMove(state) {
-  const legalMoves = [];
-  for (let x = 0; x < 9; x += 1) {
-    for (let y = 0; y < 10; y += 1) {
-      const from = { x, y };
-      getLegalMoves(state, from).forEach((to) => legalMoves.push({ from, to }));
+  const moves = listAllLegalMoves(state, state.turn);
+  if (!moves.length) return null;
+  let bestMove = moves[0];
+  let bestScore = -Infinity;
+  for (const move of sortMoves(moves)) {
+    const value = searchNext(applyMove(state, move), 1, -Infinity, Infinity);
+    if (value > bestScore) {
+      bestScore = value;
+      bestMove = move;
     }
   }
-  if (legalMoves.length === 0) return null;
-  return legalMoves.map((move) => ({
-    ...move,
-    score: getMoveScore(state, move),
-  })).sort((a, b) => b.score - a.score)[0];
+  return { ...bestMove, score: bestScore };
+}
+
+function listAllLegalMoves(state, side) {
+  const moves = [];
+  for (let y = 0; y < 10; y += 1) {
+    for (let x = 0; x < 9; x += 1) {
+      const piece = state.board[y][x];
+      if (!piece || piece.side !== side) continue;
+      getLegalMoves(state, { x, y }).forEach(to => moves.push({ from: { x, y, type: piece.type }, to }));
+    }
+  }
+  return moves;
+}
+
+function searchNext(state, depth, alpha = -Infinity, beta = Infinity) {
+  if (depth === 0) return evaluate(state, state.turn);
+  const moves = listAllLegalMoves(state, state.turn);
+  if (!moves.length) return getGameStatus(state).winner === state.turn ? MATE_SCORE : -MATE_SCORE;
+  if (depth === 1) {
+    let bestScore = -Infinity;
+    for (const move of sortMoves(moves)) {
+      const value = searchNext(applyMove(state, move), 0, alpha, beta);
+      if (value >= beta) return beta;
+      bestScore = Math.max(bestScore, value);
+      alpha = Math.max(alpha, value);
+      if (alpha >= beta) break;
+    }
+    return bestScore;
+  }
+  let bestScore = -Infinity;
+  for (const move of sortMoves(moves)) {
+    const value = searchNext(applyMove(state, move), depth - 1, alpha, beta);
+    bestScore = Math.max(bestScore, value);
+    alpha = Math.max(alpha, value);
+    if (alpha >= beta) break;
+  }
+  return bestScore;
+}
+
+function sortMoves(moves) {
+  return moves.slice().sort((a, b) => moveOrder(b, 3) - moveOrder(a, 3));
+}
+
+function moveOrder(move, depth) {
+  return getPieceValues()[move.from.type] * 10 + move.from.y;
+}
+
+function evaluate(state, side) {
+  const pieces = state.board.flat().filter(Boolean);
+  let score = 0;
+  for (const piece of pieces) {
+    score += piece.side === side ? getPieceValues()[piece.type] : -getPieceValues()[piece.type];
+    if (piece.type === "general") score += piece.side === side ? 8 : -8;
+  }
+  return score;
 }
 
 function centerBonus({ x, y }) {
@@ -42,10 +97,6 @@ function isSameColumnAsKing(state, side, { x }) {
     }
   }
   return false;
-}
-
-function getPieceValues() {
-  return { ...PIECE_VALUES };
 }
 
 function getMoveScore(state, { from, to }) {

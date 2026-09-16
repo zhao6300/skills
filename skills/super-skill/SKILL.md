@@ -30,7 +30,7 @@ Adapt the depth to blast radius: a small local edit may need a note plus the act
 
 ## Vendor-derived hard gates
 
-Three cross-cutting gates determine whether the selected mode may close. They are not extra phases to run after the work; design and execute with them during the applicable stages. When a gate is not applicable, record why rather than silently skipping it.
+Four cross-cutting gates determine whether the selected mode may close. They are not extra phases to run after the work; design and execute with them during the applicable stages. When a gate is not applicable, record why rather than silently skipping it.
 
 ### AI-first
 
