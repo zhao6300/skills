@@ -57,6 +57,7 @@ Reference `skills/super-skill/SKILL.md` when starting work. Useful prompts:
 
 ```text
 Use super-skill to implement: <one-sentence goal>
+Use super-skill + one-shot-delivery to deliver: <one-sentence goal>
 Use super-skill to diagnose: <bug or failure>
 Use super-skill to create a skill for: <recurring task>
 ```

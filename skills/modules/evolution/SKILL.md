@@ -34,6 +34,8 @@ into a narrow `references/<scenario>.md` file.
 4. Find the smallest check, command, or artifact that can prove the rule.
 5. If the rule is context-specific, create a narrow reference file instead of growing
    `SKILL.md`.
+5b. If the failure keeps happening for whole deliverables rather than one rule, route
+    it to [`references/one-shot-delivery.md`](references/one-shot-delivery.md).
 6. delete any rule now covered by the new rule.
 7. do not widen an existing skill merely to justify the new rule.
 

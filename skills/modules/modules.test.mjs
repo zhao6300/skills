@@ -21,7 +21,7 @@ const agentFiles = [
   "references/google.md",
 ];
 
-const evolutionFiles = ["SKILL.md"];
+const evolutionFiles = ["SKILL.md", "references/one-shot-delivery.md"];
 
 const sourceFiles = ["SKILL.md", "references/tech-and-research.md"];
 
@@ -89,6 +89,14 @@ test("evolution skill keeps learned rules narrow and verified", () => {
   assert.match(skill, /If a rule needs more, move the detail/);
   assert.match(skill, /delete any rule now covered by the new rule/);
   assert.match(skill, /do not widen an existing skill merely to justify the new rule/i);
+
+  const oneShot = read("evolution", "references/one-shot-delivery.md");
+  assert.match(oneShot, /## Trigger/);
+  assert.match(oneShot, /## Pre-lock/);
+  assert.match(oneShot, /## Build shape/);
+  assert.match(oneShot, /## Verification floor/);
+  assert.match(oneShot, /Two viewport widths/);
+  assert.match(oneShot, /visual review/);
 });
 
 test("source ingestion skill owns adapter contract and source selection", () => {
