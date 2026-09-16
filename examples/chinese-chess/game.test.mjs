@@ -1,7 +1,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { applyMove, createGame, getGameStatus, getLegalMoves, getMoveHistory } from "./game.js";
+import { applyMove, createGame, getGameStatus, getLegalMoves, getMoveHistory, getRepetition } from "./game.js";
 
 test("new game creates two balanced armies and marks the current turn", () => {
   const state = createGame();
@@ -136,6 +136,16 @@ test("a state with no legal move ends the game by stalemate when reached", () =>
   assert.equal(next.gameOver, true);
   assert.equal(next.winner, "red");
   assert.equal(getGameStatus(next).checkedSide, null);
+});
+
+test("three identical position fingerprints become draw evidence", () => {
+  const state = createGame();
+  const next = applyMove(state, { from: { x: 0, y: 9 }, to: { x: 0, y: 8 } });
+  const currentKey = next.positionHistory.at(-1);
+  assert.equal(getRepetition(next), 1);
+  assert.equal(next.gameOver, false);
+  const repeated = { ...next, positionHistory: [currentKey, currentKey, currentKey] };
+  assert.equal(getRepetition(repeated), 3);
 });
 
 function withBoard(state, placement) {

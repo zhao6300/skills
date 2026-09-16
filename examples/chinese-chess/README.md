@@ -25,7 +25,11 @@ node --test examples/chinese-chess/browser.test.mjs
 that AI can only suggest; the user must take an action. That preserves an AI-first loop
 without an opaque agent.
 
-The AI policy is a deterministic alpha-beta search with material and positional evaluation.
+The AI policy uses iterative deepening, alpha-beta pruning, a bounded transposition
+table, MVV-LVA move ordering, a quiescence check for exchanges, and a position-history
+penalty. That fixes the earlier smart-sounding but backward-negative local search and
+prevents a game from collapsing into a four-position loop.
 
 Rules implemented by the pure engine include forward-only soldiers, one-screen cannon
-captures, blocked horse legs, king safety, flying generals, check, checkmate, and stalemate.
+captures, blocked horse legs, king safety, flying generals, check, checkmate, stalemate,
+and the conditional threefold-repetition draw.

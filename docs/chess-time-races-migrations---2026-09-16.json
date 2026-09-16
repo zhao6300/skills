@@ -1,0 +1,64 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-09-16",
+  "status": "complete",
+  "techPlan": {
+    "problem": "Chinese chess progress can still be blocked by missing temporal signals, concurrent UI updates, or untracked schema changes.",
+    "invariants": [
+      "Every completed move must commit turn, board, phase, clock, repetition, and schema revision as one immutable state snapshot.",
+      "User, AI, and control actions must use a monotonic action id so a late asynchronous result cannot move the next turn.",
+      "Draw and forced-win thresholds must read engine-approved evidence, not arbitrary browser behavior.",
+      "Shared board, history, and memory snapshots must remain immutable.",
+      "Persistence upgrades must either complete as one transaction or provide an atomic rollback path.",
+      "Restart must restore the snapshot and then prove a legal next move before accepting input."
+    ],
+    "verification": [
+      "node --check examples/chinese-chess/ai.js examples/chinese-chess/game.js",
+      "node --test examples/chinese-chess/game.test.mjs",
+      "node --test examples/chinese-chess/ai.test.mjs",
+      "node --test examples/chinese-chess/browser.test.mjs",
+      "node --test examples/chinese-chess/game.test.mjs examples/chinese-chess/ai.test.mjs examples/chinese-chess/browser.test.mjs",
+      "Run the AI-versus-AI migration checker until a terminal state or an explicit bounded draw test is reached.",
+      "Add focused tests before updating rules, persistence, clocks, or snapshot helpers."
+    ],
+    "migrationPlan": {
+      "unknownState": "Treat absent positionHistory and repetition counters as new-game defaults, not undefined bugs.",
+      "currentRevision": "research-skill-and-test-skill",
+      "nextRevision": [
+        "Record repetition and draw evidence in the state snapshot.",
+        "Then expose the result through getGameStatus.",
+        "Then render and verify the result in the browser."
+      ]
+    },
+    "evolutionLinks": [
+      "skills/modules/new-file-code-changes/SKILL.md",
+      "skills/modules/research/SKILL.md"
+    ]
+  },
+  "toolingPlan": {
+    "inboxUpload": {
+      "rule": "Keep one definitive example artifact; do not maintain unverified model-copy variants.",
+      "evidence": "Current AI code lives in examples/chinese-chess/ai.js and has node --test evidence."
+    }
+  },
+  "history": [
+    {
+      "timestamp": "2026-09-16",
+      "type": "ai-hardening",
+      "summary": "Added AI and temporal rules to the skill, a 20-turn no-repeat test, and a template-based AI progress simulation.",
+      "verification": "node --test examples/chinese-chess/game.test.mjs examples/chinese-chess/ai.test.mjs examples/chinese-chess/browser.test.mjs"
+    },
+    {
+      "timestamp": "2026-09-16",
+      "type": "rules-migration",
+      "summary": "Added temporal migration checks across AI and game state, plus the fail-hard suggestion skill artifacts.",
+      "verification": "node --test skills/modules/modules.test.mjs examples/chinese-chess/game.test.mjs examples/chinese-chess/ai.test.mjs examples/chinese-chess/browser.test.mjs"
+    }
+  ],
+  "completed": [
+    {
+      "feature": "AI and temporal rules",
+      "evidence": "skills/modules/evolution/references/one-shot-delivery.md and checked examples"
+    }
+  ]
+}

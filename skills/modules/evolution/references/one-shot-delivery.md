@@ -52,3 +52,31 @@ Treat a deliverable as unfinished when any of these are true:
 
 When a one-shot deliverable still needs several correction rounds, add the missing check
 to this reference instead of copying the incident into another skill.
+
+## Temporal game and race hardening
+
+Use this addendum for chess, board games, turn-based games, and other deliverables where
+state advances over multiple rounds.
+
+Define the loop before adding UI polish:
+
+1. Record board, turn, phase, clock, repetition counter, and schema revision in one
+   immutable game snapshot.
+2. Give every human, AI, and control action a monotonic action id so a late async update
+   cannot move a later turn.
+3. Verify a full multi-round path or an explicit threefold-repetition draw, not just one
+   legal move at a fixed position.
+4. Treat a user restart as an async action with its own id and one legal-move verification
+   after commit.
+5. Rebuild state from a single data-owner contract on schema or persistence migration.
+6. If an AI reply is delayed or returns invalid, show a bounded thinking state and keep the
+   current player waiting for the same epoch.
+
+Use the same temporal details for a chess AI:
+
+1. Score the immediate move, then iterative deepening and alpha-beta pruning.
+2. Cache equivalent positions in a transposition table bounded by size.
+3. Prefer captures with MVV-LVA ordering, then a quiescence check for moves that
+   continue the same exchange.
+4. Treat a position reached three times as a draw plus a decisive check loss.
+5. Extract the AI-versus-AI check into a multi-round progress test, not a one-off bugfix.

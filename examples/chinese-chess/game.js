@@ -16,6 +16,7 @@ export function createGame() {
     turn: "red",
     moveHistory: [],
     captured: [],
+    positionHistory: [],
     lastMove: null,
     winner: null,
     gameOver: false,
@@ -229,11 +230,13 @@ export function applyMove(state, move) {
   const target = getPiece(state, to.x, to.y);
   nextBoard[to.y][to.x] = piece;
   const nextSide = piece.side === "red" ? "black" : "red";
+  const positionHistory = [...(state.positionHistory ?? []), serializeBoard(nextBoard, nextSide)];
   return {
     board: nextBoard,
     turn: nextSide,
     moveHistory: [...(state.moveHistory ?? []), { from: { x: from.x, y: from.y }, to: { x: to.x, y: to.y } }],
     captured: target ? [...(state.captured ?? []), target] : (state.captured ?? []),
+    positionHistory,
     lastMove: { from: { x: from.x, y: from.y }, to: { x: to.x, y: to.y } },
     ...(finishMove({ board: nextBoard, turn: nextSide }, piece.side)),
   };
@@ -253,6 +256,11 @@ export function getGameStatus(state) {
   }
   const checkedSide = state.turn && isKingInCheck(state, state.turn) ? state.turn : null;
   return { gameOver: false, winner: null, checkedSide };
+}
+
+export function getRepetition(state) {
+  const current = serializeBoard(state.board, state.turn);
+  return state.positionHistory?.reduce((count, position) => count + (position === current ? 1 : 0), 0) ?? 1;
 }
 
 export function isInside(x, y) {
@@ -317,10 +325,15 @@ function isDestroyed(state, side) {
   return !findKing(state, side);
 }
 
+function serializeBoard(board, side) {
+  return `${side}:${board.map((row) => row.map((piece) => (piece ? `${piece.side[0]}${piece.type[0]}` : ".")).join("")).join("|")}`;
+}
+
 function finishMove(nextState, movingSide) {
   const checkedSide = isKingInCheck(nextState, nextState.turn) ? nextState.turn : null;
+  const repetition = getRepetition(nextState);
   if (hasAnyLegalMove(nextState, nextState.turn)) {
-    return { winner: null, gameOver: false, checkedSide };
+    return { winner: null, gameOver: repetition >= 3, checkedSide };
   }
   return { winner: movingSide, gameOver: true, checkedSide: null };
 }
