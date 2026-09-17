@@ -51,6 +51,14 @@ test("AI advisor can recommend a legal move", () => {
   assert.equal(suggestion.to.x >= 0 && suggestion.to.x < 9, true);
 });
 
+test("AI accepts a shallow casual-game search depth", () => {
+  const suggestion = suggestAiMove(createGame(), { depth: 1 });
+  assert.ok(suggestion);
+  assert.equal(suggestion.depth, 1);
+  assert.equal(suggestion.from.x >= 0 && suggestion.from.x < 9, true);
+  assert.equal(suggestion.to.x >= 0 && suggestion.to.x < 9, true);
+});
+
 test("SEE estimates protected bad exchanges before choosing them", () => {
   const state = createGame();
   state.board = Array.from({ length: 10 }, () => Array.from({ length: 9 }, () => null));

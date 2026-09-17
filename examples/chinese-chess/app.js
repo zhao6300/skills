@@ -7,6 +7,7 @@ const turnElement = document.querySelector('[data-role="turn"]');
 const aiCardElement = document.querySelector('[data-role="ai-card"]');
 const applySuggestionButton = document.querySelector('[data-role="apply suggestion"]');
 const restartButton = document.querySelector('[data-role="restart"]');
+const scoreElement = document.querySelector('[data-role="score"]');
 const modeButtons = document.querySelectorAll('[data-mode]');
 
 let state = createGame();
@@ -30,6 +31,8 @@ function render(statusMessage) {
   statusElement.textContent = statusMessage && !gameState.gameOver ? statusMessage : defaultStatus;
   turnElement.textContent = state.turn === "red" ? "红方 · 先手" : "黑方 · 后手";
   aiCardElement.textContent = suggestion ? describeAiMove(suggestion, state) : "No suggestion";
+  const aiDepth = mode === "fun-ai" ? 1 : 2;
+  scoreElement.textContent = `${state.moveHistory.length} 手 · ${state.captured.length} 吃子 · AI 深度 ${aiDepth}`;
   applySuggestionButton.disabled = !suggestion || gameState.gameOver;
   restartButton.textContent = gameState.gameOver ? "查看平局 / 重开" : "重新开始完整对局";
 }
@@ -134,8 +137,8 @@ function updateModeButtons() {
 }
 
 function maybePlayAiMove() {
-  if (mode !== "human-ai" || state.turn !== "black") return;
-  const move = suggestAiMove(state);
+  if (!["human-ai", "fun-ai"].includes(mode) || state.turn !== "black") return;
+  const move = suggestAiMove(state, { depth: mode === "fun-ai" ? 1 : 2 });
   if (!move) return;
   state = applyMove(state, move);
   selectedPoint = null;

@@ -78,6 +78,37 @@ test("AI opponent can answer a human move", async () => {
   }
 });
 
+test("browser can switch to the casual AI mode", async () => {
+  const server = createServer(async (request, response) => {
+    const path = request.url === "/" ? "/index.html" : request.url ?? "/index.html";
+    try {
+      response.setHeader("Content-Type", types[extname(path)] ?? "application/octet-stream");
+      response.end(await readFile(join(rootDir, path)));
+    } catch {
+      response.statusCode = 404;
+      response.end("Not found");
+    }
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const browser = await chromium.launch({ executablePath, args: ["--no-sandbox", "--disable-gpu", "--headless"] });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1000, height: 900 } });
+    const errors = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.goto(`http://127.0.0.1:${server.address().port}/`);
+    await page.click('[data-mode="fun-ai"]');
+    assert.equal(await page.locator('[data-mode="fun-ai"][aria-pressed="true"]').count(), 1);
+    await page.click('[data-x="0"][data-y="9"]');
+    await page.click('[data-x="0"][data-y="8"]');
+    await page.waitForFunction(() => document.querySelector('[data-role=status]')?.textContent === "AI 已回应");
+    assert.equal(await page.locator('[data-role=score]').textContent(), "2 手 · 1 吃子 · AI 深度 1");
+    assert.deepEqual(errors, []);
+  } finally {
+    await browser.close();
+    server.close();
+  }
+});
+
 test("browser can restart and complete an AI-vs-AI game", async () => {
   const server = createServer(async (request, response) => {
     const path = request.url === "/" ? "/index.html" : request.url ?? "/index.html";

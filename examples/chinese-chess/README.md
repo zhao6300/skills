@@ -2,8 +2,9 @@
 
 An AI-first web example: the board engine owns legality, the AI policy explains a
 one-line move suggestion, and the user can accept or ignore it. The UI also exposes
-restart, shows checkmate, stalemate, and threefold-repetition results, and the headless
-test plays a complete AI-vs-AI game from the initial board to a terminal state.
+restart, a shallower `欢乐快局` policy, move/capture progress, checkmate, stalemate,
+threefold-repetition results, and the headless test plays a complete AI-vs-AI game
+from the initial board to a terminal state.
 
 ## Commands
 
@@ -23,7 +24,9 @@ node --test examples/chinese-chess/browser.test.mjs
 
 The last file includes a `browser can restart and complete an AI-vs-AI game` case. It
 restarts once, plays from the full initial arrangement until `胜利` or `和棋`, verifies
-the suggestion action is disabled at the end, then restarts again.
+the suggestion action is disabled at the end, then restarts again. There is also a
+`browser can switch to the casual AI mode` case that proves the shallow `欢乐快局`
+policy still obeys the standard engine.
 
 ## Design
 

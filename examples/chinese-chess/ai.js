@@ -62,7 +62,7 @@ function cacheSearchResult(state, depth, alpha, beta, score, flag, bestMove = nu
   }
 }
 
-export function suggestAiMove(state) {
+export function suggestAiMove(state, { depth: requestedDepth = SEARCH_DEPTH } = {}) {
   const moves = listAllLegalMoves(state, state.turn);
   if (!moves.length) return null;
 
@@ -73,7 +73,7 @@ export function suggestAiMove(state) {
   let bestMoves = rankedMoves;
   resetSearchMemory();
 
-  for (let depth = 1; depth <= SEARCH_DEPTH; depth += 1) {
+  for (let depth = 1; depth <= requestedDepth; depth += 1) {
     const scored = [];
     const depthCandidates = rankedMoves.slice(0, depth === 1 ? rankedMoves.length : ROOT_CANDIDATES);
     let alpha = -Infinity;
@@ -91,7 +91,7 @@ export function suggestAiMove(state) {
   }
 
   const chosen = bestMoves[0];
-  return { ...chosen.move, score: bestScore, depth: SEARCH_DEPTH };
+  return { ...chosen.move, score: bestScore, depth: requestedDepth };
 }
 
 export function describeAiMove(move, state) {
