@@ -11,6 +11,7 @@ entry point; use [`../skills/super-skill/SKILL.md`](../skills/super-skill/SKILL.
 | [`domain_skill_research.md`](domain_skill_research.md) | Domain-specific skill scan for frontend, backend, data, performance, and observability. |
 | [`high_star_skill_research.md`](high_star_skill_research.md) | Common behavior and anti-patterns in widely used skill repositories. |
 | [`vendor_skill_sources.md`](vendor_skill_sources.md) | Map of vendor/source patterns and where they are integrated. |
+| [`chess-fun-design.md`](chess-fun-design.md) | How to add short-session fun and feedback without weakening chess rules or AI safety. |
 
 ## Production and operations
 
