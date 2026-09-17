@@ -1,4 +1,5 @@
 import { applyMove, getLegalMoves, getGameStatus, getPieceValues } from "./game.js";
+import { repetitionPenalty, seeScore, threatScore } from "./threat.js";
 
 const MATE_SCORE = 100000;
 const SEARCH_DEPTH = 2;
@@ -80,6 +81,7 @@ export function suggestAiMove(state) {
     for (const rankedMove of depthCandidates) {
       const child = applyMove(state, rankedMove.move);
       let value = -searchNext(child, depth - 1, -beta, -alpha);
+      value -= repetitionPenalty(state, child);
       scored.push({ ...rankedMove, value });
       alpha = Math.max(alpha, value);
     }
@@ -214,7 +216,7 @@ function rootMoveScore(move, state) {
   const source = state.board[move.from.y][move.from.x];
   const attackerValue = getPieceValues()[move.from.type] ?? 100;
   let score = target
-    ? CAPTURE_ORDER_BASE + getPieceValues()[target.type] * 1000 - attackerValue
+    ? CAPTURE_ORDER_BASE + seeScore(move, state) * 60
     : attackerValue * 2
       + Math.abs(move.to.x - move.from.x) * 3
       + Math.abs(move.to.y - move.from.y) * 2;
@@ -243,7 +245,11 @@ function evaluate(state, side) {
       score += piece.side === side ? value : -value;
     }
   }
-  return score;
+  return score + computeThreats(state, side);
+}
+
+function computeThreats(state, side) {
+  return threatScore(state, side);
 }
 
 function positionBonus(piece, x, y) {

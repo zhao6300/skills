@@ -33,7 +33,10 @@ without an opaque agent.
 
 The AI policy uses iterative deepening, alpha-beta pruning, a bounded transposition
 table with a best-move slot, MVV-LVA move ordering, killer/history ordering, and a
-quiescence check for exchanges. These are the common, portable techniques demonstrated
+quiescence check for exchanges. Capture ordering now includes a conservative one-ply
+SEE (static exchange evaluation), quiet evaluation includes a bounded threat-mobility
+score, and root search subtracts a penalty for moves that recreate an earlier position.
+These are the common, portable techniques demonstrated
 by the public `wukong-xiangqi` reference;
 it deliberately remains a bounded browser policy rather than replacing it with a heavy
 NNUE engine. That fixes the earlier smart-sounding but backward-negative local search
