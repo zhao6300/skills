@@ -32,9 +32,12 @@ that AI can only suggest; the user must take an action. That preserves an AI-fir
 without an opaque agent.
 
 The AI policy uses iterative deepening, alpha-beta pruning, a bounded transposition
-table, MVV-LVA move ordering, a quiescence check for exchanges, and a position-history
-penalty. That fixes the earlier smart-sounding but backward-negative local search and
-prevents a game from collapsing into a four-position loop.
+table with a best-move slot, MVV-LVA move ordering, killer/history ordering, and a
+quiescence check for exchanges. These are the common, portable techniques demonstrated
+by the public `wukong-xiangqi` reference;
+it deliberately remains a bounded browser policy rather than replacing it with a heavy
+NNUE engine. That fixes the earlier smart-sounding but backward-negative local search
+and prevents a game from collapsing into a four-position loop.
 
 Rules implemented by the pure engine include forward-only soldiers, one-screen cannon
 captures, blocked horse legs, king safety, flying generals, check, checkmate, stalemate,
